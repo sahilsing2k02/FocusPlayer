@@ -8,6 +8,10 @@ function App() {
   const [playlistId, setPlaylistId] = useState("");
   const [showSidebar, setShowSidebar] = useState(false); // ✅ sidebar state
 
+  const [notes, setNotes] = useState(
+  localStorage.getItem("notes") || ""
+);
+
   const handleSubmit = (url) => {
     const id = getPlaylistId(url);
     setPlaylistId(id);
@@ -53,9 +57,14 @@ function App() {
       <div style={styles.section}>
         <h3>📝 Notes</h3>
         <textarea
-          placeholder="Write notes..."
-          style={styles.textarea}
-        />
+  placeholder="Write notes..."
+  value={notes}
+  onChange={(e) => {
+    setNotes(e.target.value);
+    localStorage.setItem("notes", e.target.value);
+  }}
+  style={styles.textarea}
+/>
       </div>
     </div>
   </>

@@ -12,15 +12,21 @@ export default function Timer() {
       timer = setInterval(() => {
         setSeconds((prev) => {
           if (prev === 0) {
-            // switch modes
-            if (isBreak) {
-              setIsBreak(false);
-              return 1500; // study
-            } else {
-              setIsBreak(true);
-              return 300; // break
-            }
-          }
+  // 🔔 SOUND
+  const audio = new Audio("https://www.soundjay.com/buttons/beep-01a.mp3");
+  audio.play();
+
+  // ⚠️ ALERT
+  alert(isBreak ? "Break over! Back to focus 💪" : "Time's up! Take a break ☕");
+
+  if (isBreak) {
+    setIsBreak(false);
+    return 1500; // focus
+  } else {
+    setIsBreak(true);
+    return 300; // break
+  }
+}
           return prev - 1;
         });
       }, 1000);
@@ -63,7 +69,9 @@ const [inputMinutes, setInputMinutes] = useState(25);
 
       <button
   onClick={() => {
-    setSeconds(inputMinutes * 60);
+    if (seconds === 1500 || seconds === 0) {
+      setSeconds(inputMinutes * 60);
+    }
     setIsRunning(true);
   }}
 >
