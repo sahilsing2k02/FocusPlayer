@@ -1,100 +1,126 @@
 import { useState, useEffect } from "react";
 
 export default function Timer() {
-  const [seconds, setSeconds] = useState(1500); // 25 min
+  const [seconds, setSeconds] = useState(1500);
   const [isRunning, setIsRunning] = useState(false);
-  const [isBreak, setIsBreak] = useState(false);
 
   useEffect(() => {
     let timer;
 
-    if (isRunning) {
+    if (isRunning && seconds > 0) {
       timer = setInterval(() => {
-        setSeconds((prev) => {
-          if (prev === 0) {
-  // 🔔 SOUND
-  const audio = new Audio("https://www.soundjay.com/buttons/beep-01a.mp3");
-  audio.play();
-
-  // ⚠️ ALERT
-  alert(isBreak ? "Break over! Back to focus 💪" : "Time's up! Take a break ☕");
-
-  if (isBreak) {
-    setIsBreak(false);
-    return 1500; // focus
-  } else {
-    setIsBreak(true);
-    return 300; // break
-  }
-}
-          return prev - 1;
-        });
+        setSeconds((prev) => prev - 1);
       }, 1000);
     }
 
-    return () => clearInterval(timer);
-  }, [isRunning, isBreak]);
+    if (seconds === 0) {
+      const audio = new Audio("https://www.soundjay.com/buttons/beep-01a.mp3");
+      audio.play();
+      setIsRunning(false);
+    }
 
-  // format time
+    return () => clearInterval(timer);
+  }, [isRunning, seconds]);
+
   const minutes = Math.floor(seconds / 60);
   const secs = seconds % 60;
 
-  const buttonStyle = {
-  margin: "5px",
-  padding: "10px 15px",
-  borderRadius: "5px",
-  border: "none",
-  cursor: "pointer",
-  backgroundColor: "#1e90ff",
-  color: "white",
-};
-const [inputMinutes, setInputMinutes] = useState(25);
+  const progress = (seconds / 1500) * 100;
+
   return (
-    <div style={{ marginTop: "10px" }}>
-      <h2>{isBreak ? "Break Time ☕" : "Focus Time 📚"}</h2>
-      
-      <input
-      type="number"
-      value={inputMinutes}
-      onChange={(e) => setInputMinutes(e.target.value)}
-      style={{
-      padding: "5px",
-      width: "60px",
-      marginBottom: "10px",
-  }}
-/>
-      <h1>
-        {minutes}:{secs < 10 ? `0${secs}` : secs}
-      </h1>
+    <div style={styles.container}>
+      <div style={styles.circleWrapper}>
 
-      <button
-  onClick={() => {
-    if (seconds === 1500 || seconds === 0) {
-      setSeconds(inputMinutes * 60);
-    }
-    setIsRunning(true);
-  }}
->
-  Start
-</button>
+        <div
+          style={{
+            ...styles.circle,
+            background: `conic-gradient(#ff5f57 ${progress}%, #2a2a2a ${progress}%)`,
+          }}
+        >
+          <div style={styles.innerCircle}>
+            <h1>
+              {minutes}:{secs < 10 ? `0${secs}` : secs}
+            </h1>
 
-<button
-  onClick={() => setIsRunning(false)}
-  style={buttonStyle}
->
-  Pause
-</button>
+            <div style={styles.buttonContainer}>
+              <button
+                onClick={() => setIsRunning(!isRunning)}
+                style={styles.button}
+              >
+                {isRunning ? "Pause" : "Start"}
+              </button>
+              <button
+                onClick={() => {
+                  setIsRunning(false);
+                  setSeconds(1500);
+                }}
+                style={styles.resetButton}
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
 
-<button
-  onClick={() => {
-    setIsRunning(false);
-    setSeconds(1500);
-    setIsBreak(false);
-  }}
-  style={buttonStyle}
->
-  Reset
-</button>
+      </div>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  circleWrapper: {
+    width: "200px",
+    height: "200px",
+  },
+
+  circle: {
+    width: "100%",
+    height: "100%",
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  innerCircle: {
+    width: "80%",
+    height: "80%",
+    borderRadius: "50%",
+    backgroundColor: "#121212",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+  },
+
+  buttonContainer: {
+    display: "flex",
+    gap: "10px",
+    marginTop: "10px",
+  },
+
+  button: {
+    padding: "6px 12px",
+    borderRadius: "20px",
+    border: "none",
+    backgroundColor: "#ff5f57",
+    color: "white",
+    cursor: "pointer",
+  },
+
+  resetButton: {
+    padding: "6px 12px",
+    borderRadius: "20px",
+    border: "none",
+    backgroundColor: "#555",
+    color: "white",
+    cursor: "pointer",
+  },
+};

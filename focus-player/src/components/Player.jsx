@@ -1,47 +1,46 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
-export default function Player({ playlistId }) {
-  const playerRef = useRef();
+export default function Player({ playlistId, setPlayerRef }) {
+  const playerContainerRef = useRef(null);
 
-  if (!playlistId) return null;
+  useEffect(() => {
+    if (!playlistId) return;
 
-  const url = `https://www.youtube.com/embed/videoseries?list=${playlistId}&rel=0&modestbranding=1`;
+    let player;
 
-  const goFullscreen = () => {
-    if (playerRef.current.requestFullscreen) {
-      playerRef.current.requestFullscreen();
+    function createPlayer() {
+      player = new window.YT.Player(playerContainerRef.current, {
+        height: "400",
+        width: "700",
+        playerVars: {
+          listType: "playlist",
+          list: playlistId,
+        },
+        events: {
+          onReady: (event) => {
+            if (setPlayerRef) {
+              setPlayerRef(event.target);
+            }
+          },
+        },
+      });
     }
-  };
 
-  return (
-  <div
-    style={{
-      width: "100%",
-      height: "100%",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-  >
-    <div
-      style={{
-        width: "90%",
-        height: "90%",
-        borderRadius: "10px",
-        overflow: "hidden",
-        backgroundColor: "black",
-      }}
-    >
-      <iframe
-        width="100%"
-        height="100%"
-        src={url}
-        title="YouTube Player"
-        frameBorder="0"
-        allow="autoplay; encrypted-media"
-        allowFullScreen
-      ></iframe>
-    </div>
-  </div>
-);
+    // Load API if not already loaded
+    if (!window.YT) {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.body.appendChild(tag);
+
+      window.onYouTubeIframeAPIReady = createPlayer;
+    } else {
+      createPlayer();
+    }
+
+    return () => {
+      if (player) player.destroy();
+    };
+  }, [playlistId]);
+
+  return <div ref={playerContainerRef}></div>;
 }

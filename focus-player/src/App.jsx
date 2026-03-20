@@ -12,6 +12,10 @@ function App() {
   localStorage.getItem("notes") || ""
 );
 
+const [timestampNotes, setTimestampNotes] = useState(
+  JSON.parse(localStorage.getItem("timestampNotes")) || []
+);
+
   const handleSubmit = (url) => {
     const id = getPlaylistId(url);
     setPlaylistId(id);
@@ -37,16 +41,23 @@ function App() {
       </div>
 
       {/* 🔥 SIDEBAR (LEFT) */}
-      {showSidebar && (
-  <>
-    {/* 🔥 OVERLAY */}
-    <div
-      style={styles.overlay}
-      onClick={() => setShowSidebar(false)}
-    ></div>
+      <>
+  {/* 🔥 OVERLAY */}
+  <div
+    style={{
+      ...styles.overlay,
+      display: showSidebar ? "block" : "none",
+    }}
+    onClick={() => setShowSidebar(false)}
+  ></div>
 
-    {/* 🔥 SIDEBAR */}
-    <div style={styles.sidebar}>
+  {/* 🔥 SIDEBAR */}
+  <div
+    style={{
+      ...styles.sidebar,
+      transform: showSidebar ? "translateX(0)" : "translateX(-100%)",
+    }}
+  >
       <h2>⚙️ Tools</h2>
 
       <div style={styles.section}>
@@ -55,21 +66,65 @@ function App() {
       </div>
 
       <div style={styles.section}>
-        <h3>📝 Notes</h3>
-        <textarea
-  placeholder="Write notes..."
-  value={notes}
-  onChange={(e) => {
-    setNotes(e.target.value);
-    localStorage.setItem("notes", e.target.value);
+  <h3>📝 Notes</h3>
+
+  <textarea
+    placeholder="Write notes..."
+    value={notes}
+    onChange={(e) => {
+      setNotes(e.target.value);
+      localStorage.setItem("notes", e.target.value);
+    }}
+    style={styles.textarea}
+  />
+  <button
+  onClick={() => {
+    const time = new Date().toLocaleTimeString();
+
+    const newNote = {
+      text: notes,
+      time: time,
+    };
+
+    const updated = [...timestampNotes, newNote];
+
+    setTimestampNotes(updated);
+    localStorage.setItem("timestampNotes", JSON.stringify(updated));
+    setNotes("");
   }}
-  style={styles.textarea}
-/>
-      </div>
+  style={styles.addButton}
+>
+  ➕ Add Timestamp Note
+</button>
+
+<div style={styles.notesList}>
+  {timestampNotes.map((note, index) => (
+    <div key={index} style={styles.noteItem}>
+      <span style={styles.noteTime}>{note.time}</span>
+      <p style={{ margin: 0 }}>{note.text}</p>
+    </div>
+  ))}
+</div>
+
+  {/* 🔥 ACTION BAR */}
+  <div style={styles.notesFooter}>
+    <span style={styles.charCount}>
+      {notes.length} characters
+    </span>
+
+    <button
+      onClick={() => {
+        setNotes("");
+        localStorage.removeItem("notes");
+      }}
+      style={styles.clearButton}
+    >
+      Clear
+    </button>
+  </div>
+</div>
     </div>
   </>
-)}
-
       {/* INPUT */}
       <div style={styles.inputRow}>
         <InputBox onSubmit={handleSubmit} />
@@ -167,6 +222,54 @@ const styles = {
   height: "100vh",
   backgroundColor: "rgba(0,0,0,0.5)", // 🔥 dark blur
   zIndex: 999,
+},
+ notesFooter: {
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: "8px",
+},
+
+charCount: {
+  fontSize: "12px",
+  color: "#aaa",
+},
+
+clearButton: {
+  backgroundColor: "#ff5f57",
+  border: "none",
+  color: "white",
+  padding: "5px 10px",
+  borderRadius: "5px",
+  cursor: "pointer",
+},
+addButton: {
+  marginTop: "10px",
+  padding: "6px",
+  width: "100%",
+  borderRadius: "5px",
+  border: "none",
+  backgroundColor: "#1e90ff",
+  color: "white",
+  cursor: "pointer",
+},
+
+notesList: {
+  marginTop: "10px",
+  maxHeight: "150px",
+  overflowY: "auto",
+},
+
+noteItem: {
+  backgroundColor: "#2a2a2a",
+  padding: "8px",
+  borderRadius: "5px",
+  marginBottom: "6px",
+},
+
+noteTime: {
+  fontSize: "12px",
+  color: "#aaa",
 },
 };
 
