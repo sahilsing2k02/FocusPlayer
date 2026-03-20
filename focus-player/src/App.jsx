@@ -71,8 +71,24 @@ function App() {
             <button
               onClick={() => {
                 if (!notes.trim()) return;
-                const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const newNote = { text: notes, time: time };
+
+                let timeInSeconds = 0;
+                let displayTime = "0:00";
+                let videoIndex = -1;
+
+                if (playerRef && typeof playerRef.getCurrentTime === 'function') {
+                  timeInSeconds = playerRef.getCurrentTime() || 0;
+                  if (typeof playerRef.getPlaylistIndex === 'function') {
+                    videoIndex = playerRef.getPlaylistIndex();
+                  }
+                  const m = Math.floor(timeInSeconds / 60);
+                  const s = Math.floor(timeInSeconds % 60);
+                  displayTime = `${m}:${s < 10 ? '0' + s : s}`;
+                } else {
+                  displayTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
+
+                const newNote = { text: notes, time: displayTime, seconds: timeInSeconds, videoIndex: videoIndex };
                 const updated = [...timestampNotes, newNote];
                 setTimestampNotes(updated);
                 localStorage.setItem("timestampNotes", JSON.stringify(updated));
@@ -86,7 +102,38 @@ function App() {
             <div className="notes-list">
               {timestampNotes.map((note, index) => (
                 <div key={index} className="note-card">
-                  <span className="note-time">{note.time}</span>
+                  <span
+                    className="note-time"
+                    onClick={() => {
+                      if (note.seconds !== undefined && playerRef) {
+                        if (note.videoIndex !== undefined && note.videoIndex >= 0 && typeof playerRef.getPlaylistIndex === 'function' && typeof playerRef.playVideoAt === 'function') {
+                          if (playerRef.getPlaylistIndex() !== note.videoIndex) {
+                            playerRef.playVideoAt(note.videoIndex);
+                            setTimeout(() => { playerRef.seekTo(note.seconds); }, 800);
+                            return;
+                          }
+                        }
+                        if (typeof playerRef.seekTo === 'function') {
+                          playerRef.seekTo(note.seconds);
+                          playerRef.playVideo();
+                        }
+                      }
+                    }}
+                    style={{
+                      cursor: note.seconds !== undefined ? 'pointer' : 'default',
+                      display: 'inline-block',
+                      background: note.seconds !== undefined ? 'rgba(217, 70, 239, 0.2)' : 'transparent',
+                      padding: note.seconds !== undefined ? '4px 8px' : '0',
+                      borderRadius: '6px',
+                      color: note.seconds !== undefined ? 'white' : 'inherit',
+                      fontSize: '11px',
+                      fontWeight: 'bold',
+                      letterSpacing: '0.5px'
+                    }}
+                    title={note.seconds !== undefined ? "Click to seek video" : ""}
+                  >
+                    {note.videoIndex !== undefined && note.videoIndex >= 0 ? `▶ V${note.videoIndex + 1} | ${note.time}` : (note.seconds !== undefined ? `⏱ ${note.time}` : note.time)}
+                  </span>
                   <p className="note-text">{note.text}</p>
                 </div>
               ))}
