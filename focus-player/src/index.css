@@ -741,6 +741,47 @@ textarea.notes-input:focus {
   align-items: center;
 }
 
+/* Analytics Sub-components */
+.stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(217, 70, 239, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 38px;
+  margin: 0;
+  color: var(--text-main);
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -1px;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {

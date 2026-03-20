@@ -1,3 +1,4 @@
+// src/App.jsx
 import { useState } from "react";
 import InputBox from "./components/InputBox";
 import Player from "./components/Player";
@@ -5,6 +6,8 @@ import Timer from "./components/Timer";
 import FocusTimer from "./components/FocusTimer";
 import Playlist from "./components/Playlist";
 import FeedbackModal from "./components/FeedbackModal";
+import AnalyticsModal from "./components/AnalyticsModal";
+import { useAnalytics } from "./hooks/useAnalytics";
 import { getPlaylistId } from "./utils/extractPlaylist";
 import "./index.css";
 
@@ -13,7 +16,10 @@ function App() {
   const [playlistTitle, setPlaylistTitle] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const [playerRef, setPlayerRef] = useState(null);
+
+  useAnalytics(playerRef);
 
   const [notes, setNotes] = useState(
     localStorage.getItem("notes") || ""
@@ -55,13 +61,24 @@ function App() {
           </button>
           <h2>Focus Player</h2>
         </div>
-        <button
-          onClick={() => setShowFeedback(true)}
-          className="btn-primary"
-          style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '16px' }}
-        >
-          ⭐ Community Feedback
-        </button>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button
+            onClick={() => setShowAnalytics(true)}
+            className="btn-primary"
+            style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: 'none' }}
+            onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+            onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
+          >
+            📊 Analytics
+          </button>
+          <button
+            onClick={() => setShowFeedback(true)}
+            className="btn-primary"
+            style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '16px' }}
+          >
+            ⭐ Community Feedback
+          </button>
+        </div>
       </div>
 
       {/* SIDEBAR */}
@@ -231,6 +248,11 @@ function App() {
           </div>
         )}
       </div>
+
+      {/* ANALYTICS MODAL */}
+      {showAnalytics && (
+        <AnalyticsModal onClose={() => setShowAnalytics(false)} />
+      )}
 
       {/* FEEDBACK MODAL */}
       {showFeedback && (

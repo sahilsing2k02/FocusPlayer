@@ -100,46 +100,75 @@ export default function FocusTimer() {
 
             {/* Circular Timer UI */}
             <div className="timer-circle" style={{
-                width: '180px', height: '180px',
+                width: '240px', height: '240px',
                 background: `conic-gradient(${isStudy ? 'var(--accent-color)' : 'var(--success-color)'} ${progress}%, rgba(255,255,255,0.05) ${progress}%)`,
-                boxShadow: isRunning ? `0 0 25px ${isStudy ? 'rgba(217, 70, 239, 0.3)' : 'rgba(16, 185, 129, 0.3)'}` : '0 0 15px rgba(0,0,0,0.3)'
+                boxShadow: isRunning ? `0 0 35px ${isStudy ? 'rgba(217, 70, 239, 0.25)' : 'rgba(16, 185, 129, 0.25)'}` : '0 0 15px rgba(0,0,0,0.3)',
+                transition: 'all 0.5s ease'
             }}>
                 <div className="timer-inner" style={{ background: 'var(--bg-color)' }}>
                     <span style={{
                         fontSize: '11px',
                         fontWeight: 'bold',
-                        letterSpacing: '1px',
+                        letterSpacing: '2px',
                         color: isStudy ? 'var(--accent-color)' : 'var(--success-color)',
                         marginBottom: '4px',
                         textTransform: 'uppercase'
                     }}>
                         {mode}
                     </span>
-                    <h1 style={{ fontSize: '42px', margin: 0, color: 'var(--text-main)' }}>
+                    <h1 style={{ fontSize: '56px', margin: 0, color: 'var(--text-main)', fontWeight: '800', fontVariantNumeric: 'tabular-nums', letterSpacing: '-1px' }}>
                         {formattedTime}
                     </h1>
 
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '14px' }}>
+                    <div style={{ display: 'flex', gap: '16px', marginTop: '16px', alignItems: 'center' }}>
                         <button
                             onClick={() => setIsRunning(!isRunning)}
                             style={{
-                                background: isRunning ? 'rgba(239, 68, 68, 0.2)' : 'var(--accent-gradient)',
-                                color: isRunning ? '#fca5a5' : 'white',
-                                border: isRunning ? '1px solid rgba(239, 68, 68, 0.3)' : 'none',
-                                padding: '8px 16px', borderRadius: '20px', cursor: 'pointer', fontSize: '14px'
+                                width: '60px', height: '60px', borderRadius: '50%',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                background: isRunning ? 'rgba(255, 255, 255, 0.1)' : 'var(--text-main)',
+                                color: isRunning ? 'var(--text-main)' : 'var(--bg-color)',
+                                border: isRunning ? '1px solid rgba(255,255,255,0.2)' : 'none',
+                                cursor: 'pointer',
+                                boxShadow: isRunning ? 'none' : '0 10px 30px rgba(255, 255, 255, 0.2)',
+                                transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                             }}
+                            onMouseEnter={(e) => !isRunning && (e.currentTarget.style.transform = 'scale(1.08)')}
+                            onMouseLeave={(e) => !isRunning && (e.currentTarget.style.transform = 'scale(1)')}
                         >
-                            {isRunning ? '⏸️' : '▶️'}
+                            {isRunning ? (
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <rect x="6" y="4" width="4" height="16" rx="1"></rect>
+                                    <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+                                </svg>
+                            ) : (
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: '4px' }}>
+                                    <path d="M5 3l14 9-14 9V3z"></path>
+                                </svg>
+                            )}
                         </button>
+
                         <button
                             onClick={() => {
                                 setIsRunning(false);
                                 setMode('study');
                                 setTimeLeft(studyM * 60 + studyS);
                             }}
-                            style={{ background: 'rgba(255,255,255,0.1)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '20px', cursor: 'pointer', fontSize: '14px' }}
+                            style={{
+                                width: '46px', height: '46px', borderRadius: '50%',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)',
+                                border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer',
+                                transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
+                            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'rgba(255,255,255,0.03)' }}
+                            title="Reset Timer"
                         >
-                            🔄
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                <path d="M3 3v5h5"></path>
+                            </svg>
                         </button>
                     </div>
                 </div>
