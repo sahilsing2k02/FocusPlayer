@@ -1,126 +1,112 @@
 import { useState, useEffect } from "react";
+import "../index.css";
 
-export default function Timer() {
-  const [seconds, setSeconds] = useState(1500);
-  const [isRunning, setIsRunning] = useState(false);
+export default function Timer({ playerRef }) {
+  const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playlistData, setPlaylistData] = useState({ index: 0, total: 0 });
 
   useEffect(() => {
-    let timer;
+    let interval;
 
-    if (isRunning && seconds > 0) {
-      timer = setInterval(() => {
-        setSeconds((prev) => prev - 1);
+    if (playerRef && typeof playerRef.getCurrentTime === 'function') {
+      interval = setInterval(() => {
+        const current = playerRef.getCurrentTime() || 0;
+        const total = playerRef.getDuration() || 0;
+        const state = playerRef.getPlayerState ? playerRef.getPlayerState() : -1;
+
+        let pIndex = 0;
+        let pTotal = 0;
+        let currentProgress = 0;
+
+        if (typeof playerRef.getPlaylist === 'function' && typeof playerRef.getPlaylistIndex === 'function') {
+          const arr = playerRef.getPlaylist();
+          if (arr && arr.length > 0) {
+            pTotal = arr.length;
+            pIndex = playerRef.getPlaylistIndex();
+            // Smoothly combine current video's ratio with index base
+            const videoRatio = total > 0 ? (current / total) : 0;
+            currentProgress = ((pIndex + videoRatio) / pTotal) * 100;
+          } else if (total > 0) {
+            currentProgress = (current / total) * 100;
+          }
+        }
+
+        setCurrentTime(current);
+        setDuration(total);
+        setProgress(currentProgress);
+        setIsPlaying(state === 1);
+        setPlaylistData({ index: pIndex, total: pTotal });
+
       }, 1000);
     }
 
-    if (seconds === 0) {
-      const audio = new Audio("https://www.soundjay.com/buttons/beep-01a.mp3");
-      audio.play();
-      setIsRunning(false);
+    return () => clearInterval(interval);
+  }, [playerRef]);
+
+  const formatTime = (timeInSeconds) => {
+    if (!timeInSeconds || isNaN(timeInSeconds)) return "0:00";
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = Math.floor(timeInSeconds % 60);
+    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+  };
+
+  const handleTogglePlay = () => {
+    if (!playerRef) return;
+    if (isPlaying) {
+      playerRef.pauseVideo();
+    } else {
+      playerRef.playVideo();
     }
+  };
 
-    return () => clearInterval(timer);
-  }, [isRunning, seconds]);
-
-  const minutes = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-
-  const progress = (seconds / 1500) * 100;
+  const handleReset = () => {
+    if (!playerRef) return;
+    if (playlistData.total > 0 && typeof playerRef.playVideoAt === 'function') {
+      playerRef.playVideoAt(0); // Restart entire playlist
+    } else {
+      playerRef.seekTo(0);
+      playerRef.playVideo();
+    }
+  };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.circleWrapper}>
+    <div className="timer-container">
+      <div className="timer-circle" style={{
+        background: `conic-gradient(var(--accent-color) ${progress}%, rgba(255,255,255,0.05) ${progress}%)`
+      }}>
+        <div className="timer-inner">
+          <h1 style={{ fontSize: '32px' }}>
+            {playlistData.total > 0 ? `${playlistData.index + 1} / ${playlistData.total}` : formatTime(currentTime)}
+          </h1>
+          <span style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '-8px', marginBottom: '8px', letterSpacing: '1px' }}>
+            {playlistData.total > 0 ? "PLAYLIST PROGRESS" : `/ ${formatTime(duration)}`}
+          </span>
 
-        <div
-          style={{
-            ...styles.circle,
-            background: `conic-gradient(#ff5f57 ${progress}%, #2a2a2a ${progress}%)`,
-          }}
-        >
-          <div style={styles.innerCircle}>
-            <h1>
-              {minutes}:{secs < 10 ? `0${secs}` : secs}
-            </h1>
-
-            <div style={styles.buttonContainer}>
-              <button
-                onClick={() => setIsRunning(!isRunning)}
-                style={styles.button}
-              >
-                {isRunning ? "Pause" : "Start"}
-              </button>
-              <button
-                onClick={() => {
-                  setIsRunning(false);
-                  setSeconds(1500);
-                }}
-                style={styles.resetButton}
-              >
-                Reset
-              </button>
-            </div>
+          <div className="timer-controls">
+            <button
+              onClick={handleTogglePlay}
+              className={`timer-btn ${isPlaying ? "danger" : "active"}`}
+              disabled={!playerRef}
+              style={{ opacity: playerRef ? 1 : 0.5, fontSize: '18px', padding: '6px 14px' }}
+              title={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? "⏸️" : "▶️"}
+            </button>
+            <button
+              onClick={handleReset}
+              className="timer-btn"
+              disabled={!playerRef}
+              style={{ opacity: playerRef ? 1 : 0.5, fontSize: '18px', padding: '6px 14px' }}
+              title="Restart Playlist"
+            >
+              🔄
+            </button>
           </div>
         </div>
-
       </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  circleWrapper: {
-    width: "200px",
-    height: "200px",
-  },
-
-  circle: {
-    width: "100%",
-    height: "100%",
-    borderRadius: "50%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  innerCircle: {
-    width: "80%",
-    height: "80%",
-    borderRadius: "50%",
-    backgroundColor: "#121212",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-  },
-
-  buttonContainer: {
-    display: "flex",
-    gap: "10px",
-    marginTop: "10px",
-  },
-
-  button: {
-    padding: "6px 12px",
-    borderRadius: "20px",
-    border: "none",
-    backgroundColor: "#ff5f57",
-    color: "white",
-    cursor: "pointer",
-  },
-
-  resetButton: {
-    padding: "6px 12px",
-    borderRadius: "20px",
-    border: "none",
-    backgroundColor: "#555",
-    color: "white",
-    cursor: "pointer",
-  },
-};

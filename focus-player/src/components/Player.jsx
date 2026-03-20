@@ -10,11 +10,14 @@ export default function Player({ playlistId, setPlayerRef }) {
 
     function createPlayer() {
       player = new window.YT.Player(playerContainerRef.current, {
-        height: "400",
-        width: "700",
+        height: "100%",
+        width: "100%",
         playerVars: {
           listType: "playlist",
           list: playlistId,
+          rel: 0,
+          modestbranding: 1,
+          iv_load_policy: 3,
         },
         events: {
           onReady: (event) => {
@@ -26,7 +29,6 @@ export default function Player({ playlistId, setPlayerRef }) {
       });
     }
 
-    // Load API if not already loaded
     if (!window.YT) {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
@@ -40,7 +42,7 @@ export default function Player({ playlistId, setPlayerRef }) {
     return () => {
       if (player) player.destroy();
     };
-  }, [playlistId]);
+  }, [playlistId, setPlayerRef]);
 
-  return <div ref={playerContainerRef}></div>;
+  return <div ref={playerContainerRef} style={{ width: "100%", height: "100%" }}></div>;
 }
