@@ -86,7 +86,7 @@ A distraction-free YouTube player designed for focused learning and productivity
 📝 Timestamp Notes (jump to exact moments)
 🎯 Focus Mode (minimal UI)
 🔁 Playlist Support & Auto-play
-💾 Session Save & Resume
+💾 Session Save
 
 ## 📜 License & Copyright
 © 2026 **Sahil Singh**. All rights reserved.  
