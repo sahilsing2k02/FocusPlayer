@@ -60,7 +60,6 @@ function App() {
             ☰
           </button>
           <h2>Focus Player</h2>
-          <span style={{ fontSize: '12px', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '12px', marginLeft: '8px' }}>by Sahil Singh</span>
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button
@@ -259,10 +258,6 @@ function App() {
       {showFeedback && (
         <FeedbackModal onClose={() => setShowFeedback(false)} />
       )}
-      {/* FOOTER / COPYRIGHT */}
-      <footer style={{ textAlign: 'center', padding: '40px 0 20px 0', color: 'var(--text-muted)', fontSize: '13px', opacity: 0.6 }}>
-        © 2026 FocusPlayer • Made by **Sahil Singh**
-      </footer>
     </div>
   );
 }

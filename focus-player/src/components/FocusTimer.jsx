@@ -23,7 +23,7 @@ export default function FocusTimer() {
             alarmAudio.currentTime = 0;
             alarmAudio.play().catch(e => console.log("Audio error:", e));
 
-            setIsRunning(false);
+            setTimeout(() => setIsRunning(false), 0);
 
             setTimeout(() => {
                 if (mode === 'study') {

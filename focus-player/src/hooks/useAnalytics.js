@@ -33,7 +33,7 @@ export function useAnalytics(playerRef) {
                     const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
                     if (stats.lastActiveDate === yesterday) {
                         stats.streak += 1;
-                    } else if (stats.lastActiveDate !== today) {
+                    } else {
                         stats.streak = 1;
                     }
                     stats.lastActiveDate = today;
