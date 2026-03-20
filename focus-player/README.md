@@ -67,5 +67,6 @@ export const db = getFirestore(app);
 npm run dev
 ```
 
-## 📜 License
-MIT License - Created with ❤️ for productive students everywhere.
+## 📜 License & Copyright
+© 2026 **Sahil Singh**. All rights reserved.  
+Created with ❤️ for productive students everywhere.
