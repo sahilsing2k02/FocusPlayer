@@ -4,12 +4,15 @@ import Player from "./components/Player";
 import Timer from "./components/Timer";
 import FocusTimer from "./components/FocusTimer";
 import Playlist from "./components/Playlist";
+import FeedbackModal from "./components/FeedbackModal";
 import { getPlaylistId } from "./utils/extractPlaylist";
 import "./index.css";
 
 function App() {
   const [playlistId, setPlaylistId] = useState("");
+  const [playlistTitle, setPlaylistTitle] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
   const [playerRef, setPlayerRef] = useState(null);
 
   const [notes, setNotes] = useState(
@@ -20,24 +23,45 @@ function App() {
     JSON.parse(localStorage.getItem("timestampNotes")) || []
   );
 
-  const handleSubmit = (url) => {
+  const handleSubmit = async (url) => {
     const id = getPlaylistId(url);
     if (id) {
       setPlaylistId(id);
+
+      try {
+        const titleRes = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/playlist?list=${id}`);
+        const data = await titleRes.json();
+        if (data && data.title) {
+          setPlaylistTitle(data.title);
+        } else {
+          setPlaylistTitle("Focus Playlist");
+        }
+      } catch (err) {
+        setPlaylistTitle("Focus Playlist");
+      }
     }
   };
 
   return (
     <div className="app-container">
       {/* HEADER */}
-      <div className="header">
+      <div className="header" style={{ justifyContent: 'space-between', width: '100%' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <button
+            onClick={() => setShowSidebar(!showSidebar)}
+            className="menu-btn"
+          >
+            ☰
+          </button>
+          <h2>Focus Player</h2>
+        </div>
         <button
-          onClick={() => setShowSidebar(!showSidebar)}
-          className="menu-btn"
+          onClick={() => setShowFeedback(true)}
+          className="btn-primary"
+          style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '16px' }}
         >
-          ☰
+          ⭐ Community Feedback
         </button>
-        <h2>Focus Player</h2>
       </div>
 
       {/* SIDEBAR */}
@@ -168,9 +192,25 @@ function App() {
         </div>
       </>
 
-      {/* INPUT */}
+      {/* INPUT / HEADER */}
       <div className="input-row">
-        <InputBox onSubmit={handleSubmit} />
+        {!playlistId ? (
+          <InputBox onSubmit={handleSubmit} />
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', padding: '12px 24px', borderRadius: '40px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+            <h1 style={{ fontSize: '24px', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: 0 }}>
+              {playlistTitle || "Loading Title..."}
+            </h1>
+            <button
+              onClick={() => { setPlaylistId(''); setPlaylistTitle(''); setPlayerRef(null); }}
+              style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold', transition: 'all 0.2s', marginLeft: '12px' }}
+              onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
+              onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+            >
+              Change Playlist
+            </button>
+          </div>
+        )}
       </div>
 
       {/* VIDEO & PLAYLIST */}
@@ -191,6 +231,11 @@ function App() {
           </div>
         )}
       </div>
+
+      {/* FEEDBACK MODAL */}
+      {showFeedback && (
+        <FeedbackModal onClose={() => setShowFeedback(false)} />
+      )}
     </div>
   );
 }
