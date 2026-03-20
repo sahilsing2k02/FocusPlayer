@@ -66,6 +66,27 @@ export const db = getFirestore(app);
 ```bash
 npm run dev
 ```
+### 4. Some Screenshots of the Projects
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1bb7d890-e744-4f5b-80b4-f1396f0298f0" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/30d2f673-a9dc-49b8-83ca-bceb4d2f719d" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/15e71d18-b51c-4a5e-8f5a-6751c5ddd6bb" />
+<img width="413" height="688" alt="image" src="https://github.com/user-attachments/assets/ffd3ddc7-ceb4-470c-b5f0-bb0019050328" />
+<img width="1916" height="1030" alt="image" src="https://github.com/user-attachments/assets/d74181da-451e-4343-b8a9-6f46f27b32f2" />
+<img width="1083" height="905" alt="image" src="https://github.com/user-attachments/assets/e336497d-d23c-4f97-8110-26e43bce092a" />
+
+🚀 FocusTube
+A distraction-free YouTube player designed for focused learning and productivity.
+
+✨ Features
+🔕 No Ads, Zero Distraction UI
+⏱️ Built-in Study Timer
+📊 Progress Tracking (playlist & videos)
+📈 Real-Time Analytics (watch time, sessions)
+🧠 Productivity Feedback & Insights
+📝 Timestamp Notes (jump to exact moments)
+🎯 Focus Mode (minimal UI)
+🔁 Playlist Support & Auto-play
+💾 Session Save & Resume
 
 ## 📜 License & Copyright
 © 2026 **Sahil Singh**. All rights reserved.  
