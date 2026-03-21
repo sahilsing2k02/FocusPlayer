@@ -2,6 +2,10 @@
 
 FocusPlayer is a premium, glassmorphic web application designed to transform your YouTube learning experience into a productive, distraction-free environment. It combines powerful focus tools, real-time analytics, and community engagement into one seamless dashboard.
 
+#NoAds
+#NoSignups
+#NoDistractions
+
 RealTime Working Link:https://focus-player-mauve.vercel.app/
 
 ## 🚀 Key Features
