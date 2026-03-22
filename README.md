@@ -94,6 +94,17 @@ A distraction-free YouTube player designed for focused learning and productivity
 🔁 Playlist Support & Auto-play
 💾 Session Save
 
+## 🆕 Recent Updates
+
+### 2026-03-22
+- **Persistent To-Do List**: Integrated a local-storage task list with custom SVG checkboxes and list animations.
+- **Ambient Sounds**: Added a Rain background noise module with adjustable volume to enhance focus.
+- **Enhanced Notes**: Upgraded video timestamps with color-coded tags (`Important`, `Code`, `Review`) and sleek pill selectors.
+- **Theme Engine**: Implemented an overarching Light/Dark mode CSS architecture with a seamless toggle switch.
+- **Notes to PDF Export**: Enabled instant downloading of all video timestamps and notes as a cleanly formatted PDF document.
+- **Timer UI Upgrade**: Restructured the Focus Timer to display as an elegant, minimal oval badge in the header during active sessions.
+- **UI Facelift**: Overhauled inputs, lists, and components with deep glassmorphism and vibrant gradient focus boundaries.
+
 ## 📜 License & Copyright
 © 2026 **Sahil Singh**. All rights reserved.  
 Created with ❤️ for productive students everywhere.

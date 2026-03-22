@@ -1,19 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import "../index.css";
 
 export default function AnalyticsModal({ onClose }) {
-    const [stats, setStats] = useState({
-        watchTime: 0,
-        completedVideos: 0,
-        streak: 0,
-        dailyWatchTime: {}
+    const [stats] = useState(() => {
+        const data = localStorage.getItem("focus_analytics");
+        return data ? JSON.parse(data) : {
+            watchTime: 0,
+            completedVideos: 0,
+            streak: 0,
+            dailyWatchTime: {}
+        };
     });
-
-    useEffect(() => {
-        const data = JSON.parse(localStorage.getItem("focus_analytics"));
-        if (data) setStats(data);
-    }, []);
 
     const formatTime = (totalSeconds) => {
         const h = Math.floor(totalSeconds / 3600);

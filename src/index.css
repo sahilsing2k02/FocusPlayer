@@ -22,6 +22,16 @@
   -webkit-font-smoothing: antialiased;
 }
 
+body.theme-light {
+  --bg-color: #f8fafc;
+  --panel-bg: rgba(255, 255, 255, 0.85);
+  --panel-border: rgba(0, 0, 0, 0.1);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  --accent-color: #a855f7;
+}
+
 *,
 *::before,
 *::after {
@@ -192,22 +202,25 @@ h6 {
 /* Notes */
 textarea.notes-input {
   width: 100%;
-  height: 110px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--panel-border);
-  border-radius: 14px;
-  padding: 16px;
+  height: 120px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px;
   color: var(--text-main);
   font-family: inherit;
+  font-size: 15px;
+  line-height: 1.6;
   resize: none;
   outline: none;
-  transition: all 0.2s ease;
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 textarea.notes-input:focus {
-  border-color: rgba(217, 70, 239, 0.5);
-  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(217, 70, 239, 0.6);
+  background: rgba(15, 17, 26, 0.8);
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(217, 70, 239, 0.15);
 }
 
 .btn-primary {
@@ -239,24 +252,72 @@ textarea.notes-input:focus {
 .notes-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-height: 280px;
+  gap: 16px;
+  max-height: 320px;
   overflow-y: auto;
   padding-right: 6px;
 }
 
 .note-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 14px;
-  border-radius: 12px;
-  animation: fadeIn 0.4s ease;
-  transition: transform 0.2s, background 0.2s;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 18px;
+  border-radius: 16px;
+  animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.note-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 4px; height: 100%;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .note-card:hover {
-  background: rgba(255, 255, 255, 0.04);
-  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(6px) translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  border-color: rgba(217, 70, 239, 0.3);
+}
+
+.note-card:hover::before {
+  opacity: 1;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.tag-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-muted);
+}
+
+.tag-pill.active {
+  background: var(--accent-gradient);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(217, 70, 239, 0.3);
+}
+
+.tag-pill:hover:not(.active) {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-main);
+  border-color: rgba(255,255,255,0.2);
 }
 
 .note-time {
