@@ -22,16 +22,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-body.theme-light {
-  --bg-color: #f8fafc;
-  --panel-bg: rgba(255, 255, 255, 0.85);
-  --panel-border: rgba(0, 0, 0, 0.1);
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-  --accent-color: #a855f7;
-}
-
 *,
 *::before,
 *::after {

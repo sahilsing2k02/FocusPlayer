@@ -22,17 +22,8 @@ function App() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [playerRef, setPlayerRef] = useState(null);
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
 
   useAnalytics(playerRef);
-
-  useEffect(() => {
-    if (theme === "light") {
-      document.body.classList.add("theme-light");
-    } else {
-      document.body.classList.remove("theme-light");
-    }
-  }, [theme]);
 
   const [notes, setNotes] = useState(
     localStorage.getItem("notes") || ""
@@ -125,17 +116,6 @@ function App() {
         </div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <FocusTimerBadge timerProps={timerProps} />
-          <button
-            onClick={() => {
-              const nextTheme = theme === "light" ? "dark" : "light";
-              setTheme(nextTheme);
-              localStorage.setItem("theme", nextTheme);
-            }}
-            style={{ background: 'transparent', border: '1px solid var(--panel-border)', borderRadius: '50%', color: 'var(--text-main)', fontSize: '18px', cursor: 'pointer', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            title="Toggle Theme"
-          >
-            {theme === "light" ? "🌙" : "☀️"}
-          </button>
           <AmbientSounds />
           <button
             onClick={() => setShowAnalytics(true)}
