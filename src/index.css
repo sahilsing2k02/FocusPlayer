@@ -667,6 +667,7 @@ textarea.notes-input:focus {
 
 .time-input[type=number] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 /* Feedback Modal */
@@ -836,6 +837,7 @@ textarea.notes-input:focus {
   margin: 0;
   color: var(--text-main);
   background: var(--accent-gradient);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 800;
