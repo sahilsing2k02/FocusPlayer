@@ -23,6 +23,13 @@ function App() {
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [playerRef, setPlayerRef] = useState(null);
 
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  
+  useEffect(() => {
+    document.documentElement.className = theme === "dark" ? "dark" : "light";
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   useAnalytics(playerRef);
 
   const [notes, setNotes] = useState(
@@ -47,7 +54,7 @@ function App() {
     let yPos = 20;
 
     doc.setFontSize(20);
-    doc.setTextColor(139, 92, 246);
+    doc.setTextColor(239, 68, 68);
     doc.text(playlistTitle || "FocusPlayer Study Session", 10, yPos);
     
     yPos += 10;
@@ -118,11 +125,20 @@ function App() {
           <FocusTimerBadge timerProps={timerProps} />
           <AmbientSounds />
           <button
+            onClick={() => setTheme(t => t === 'light' ? 'dark' : 'light')}
+            className="btn-primary"
+            style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '16px', background: 'var(--c-overlay-light)', border: '1px solid var(--c-border)', color: 'var(--text-main)', boxShadow: 'none' }}
+            onMouseEnter={(e) => e.target.style.background = 'var(--c-overlay)'}
+            onMouseLeave={(e) => e.target.style.background = 'var(--c-overlay-light)'}
+          >
+            {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+          </button>
+          <button
             onClick={() => setShowAnalytics(true)}
             className="btn-primary"
-            style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '16px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: 'none' }}
-            onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
-            onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
+            style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '16px', background: 'var(--c-overlay-light)', border: '1px solid rgba(239, 68, 68, 0.2)', color: 'var(--text-main)', boxShadow: 'none' }}
+            onMouseEnter={(e) => e.target.style.background = 'var(--c-overlay)'}
+            onMouseLeave={(e) => e.target.style.background = 'var(--c-overlay-light)'}
           >
             📊 Analytics
           </button>
@@ -241,10 +257,10 @@ function App() {
                       style={{
                         cursor: note.seconds !== undefined ? 'pointer' : 'default',
                         display: 'inline-block',
-                        background: note.seconds !== undefined ? 'rgba(217, 70, 239, 0.2)' : 'transparent',
+                        background: note.seconds !== undefined ? 'var(--c-overlay-strong)' : 'transparent',
                         padding: note.seconds !== undefined ? '4px 8px' : '0',
                         borderRadius: '6px',
-                        color: note.seconds !== undefined ? 'white' : 'inherit',
+                        color: note.seconds !== undefined ? 'var(--danger-color)' : 'inherit',
                         fontSize: '11px',
                         fontWeight: 'bold',
                         letterSpacing: '0.5px'
@@ -259,7 +275,7 @@ function App() {
                         padding: '2px 6px', 
                         borderRadius: '4px', 
                         fontWeight: 'bold',
-                        background: note.tag === 'Important' ? 'rgba(239, 68, 68, 0.2)' : note.tag === 'Code' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(249, 115, 22, 0.2)',
+                        background: note.tag === 'Important' ? 'var(--c-border)' : note.tag === 'Code' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(249, 115, 22, 0.2)',
                         color: note.tag === 'Important' ? '#ef4444' : note.tag === 'Code' ? '#3b82f6' : '#f97316'
                       }}>
                         {note.tag === 'Important' ? '🔴 Important' : note.tag === 'Code' ? '🔵 Code' : '🟠 Review'}
@@ -278,9 +294,9 @@ function App() {
                   <button
                     onClick={exportNotesToPDF}
                     className="btn-clear"
-                    style={{ borderColor: 'rgba(139, 92, 246, 0.4)', color: '#d8b4fe' }}
-                    onMouseEnter={(e) => { e.target.style.background = 'rgba(139, 92, 246, 0.15)'; e.target.style.borderColor = 'rgba(139, 92, 246, 0.8)'; }}
-                    onMouseLeave={(e) => { e.target.style.background = 'transparent'; e.target.style.borderColor = 'rgba(139, 92, 246, 0.4)'; e.target.style.color = '#d8b4fe'; }}
+                    style={{ borderColor: 'var(--c-border-heavy)', color: 'var(--danger-color)' }}
+                    onMouseEnter={(e) => { e.target.style.background = 'var(--c-overlay)'; e.target.style.borderColor = 'var(--c-hover-solid)'; }}
+                    onMouseLeave={(e) => { e.target.style.background = 'transparent'; e.target.style.borderColor = 'var(--c-border-heavy)'; e.target.style.color = 'var(--danger-color)'; }}
                     title="Download Notes as PDF"
                   >
                     📄 To PDF
@@ -319,15 +335,15 @@ function App() {
         {!currentUrl ? (
           <InputBox onSubmit={handleSubmit} />
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', padding: '12px 24px', borderRadius: '40px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'var(--c-card-bg)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '12px 24px', borderRadius: '40px', boxShadow: '0 10px 30px rgba(239, 68, 68, 0.1)' }}>
             <h1 style={{ fontSize: '24px', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: 0 }}>
               {playlistTitle || "Loading Title..."}
             </h1>
             <button
               onClick={() => { setCurrentUrl(''); setPlaylistTitle(''); setPlayerRef(null); }}
-              style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold', transition: 'all 0.2s', marginLeft: '12px' }}
-              onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.2)'}
-              onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+              style={{ background: 'var(--c-overlay)', border: 'none', color: 'var(--danger-color)', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold', transition: 'all 0.2s', marginLeft: '12px' }}
+              onMouseEnter={(e) => e.target.style.background = 'var(--c-border)'}
+              onMouseLeave={(e) => e.target.style.background = 'var(--c-overlay)'}
             >
               Change Playlist
             </button>

@@ -50,8 +50,8 @@ export default function Playlist({ playerRef }) {
                         key={index}
                         className="playlist-card"
                         style={{
-                            borderColor: isActive ? 'rgba(217, 70, 239, 0.5)' : '',
-                            backgroundColor: isActive ? 'rgba(217, 70, 239, 0.1)' : ''
+                            borderColor: isActive ? 'var(--c-border-xl)' : '',
+                            backgroundColor: isActive ? 'var(--c-overlay)' : ''
                         }}
                         onClick={() => {
                             if (playerRef && typeof playerRef.playVideoAt === 'function') {

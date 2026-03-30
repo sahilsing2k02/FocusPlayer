@@ -130,12 +130,12 @@ export default function FeedbackModal({ onClose }) {
                                     <div key={fb.id} className="feedback-card">
                                         <div className="feedback-card-header">
                                             <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{fb.name}</span>
-                                            <span style={{ color: 'var(--text-muted)', fontSize: '11px', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '10px' }}>{fb.displayDate}</span>
+                                            <span style={{ color: 'var(--text-muted)', fontSize: '11px', background: 'var(--c-overlay)', padding: '2px 8px', borderRadius: '10px' }}>{fb.displayDate}</span>
                                         </div>
                                         <div style={{ margin: '6px 0', fontSize: '12px' }}>
                                             {"⭐".repeat(fb.rating)}
                                         </div>
-                                        <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)', margin: 0, lineHeight: '1.6' }}>
+                                        <p style={{ fontSize: '14px', color: 'var(--c-overlay)', margin: 0, lineHeight: '1.6' }}>
                                             {fb.message}
                                         </p>
                                     </div>

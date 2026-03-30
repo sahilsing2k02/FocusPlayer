@@ -75,7 +75,7 @@ export default function Timer({ playerRef }) {
   return (
     <div className="timer-container">
       <div className="timer-circle" style={{
-        background: `conic-gradient(var(--accent-color) ${progress}%, rgba(255,255,255,0.05) ${progress}%)`
+        background: `conic-gradient(var(--accent-color) ${progress}%, rgba(239,68,68,0.1) ${progress}%)`
       }}>
         <div className="timer-inner">
           <h1 style={{ fontSize: '32px' }}>

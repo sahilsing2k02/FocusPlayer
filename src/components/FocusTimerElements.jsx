@@ -79,11 +79,11 @@ export function FocusTimerSidebar({ timerProps }) {
     const isStudy = mode === 'study';
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', background: 'var(--c-card-bg-strong)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(239,68,68,0.1)' }}>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {/* Study Row */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '8px 14px', borderRadius: '10px', border: '1px solid rgba(217, 70, 239, 0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--c-overlay)', padding: '8px 14px', borderRadius: '10px', border: '1px solid rgba(239,68,68, 0.1)' }}>
                     <span style={{ fontSize: '11px', color: 'var(--accent-color)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>Study</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <input type="number" min="0" value={studyM === 0 && studyS === 0 ? '' : studyM} onChange={(e) => handleTimeChange('study', 'm', e.target.value)} disabled={isRunning && isStudy} className="time-input" placeholder="00" />
@@ -93,7 +93,7 @@ export function FocusTimerSidebar({ timerProps }) {
                 </div>
 
                 {/* Break Row */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '8px 14px', borderRadius: '10px', border: '1px solid rgba(16, 185, 129, 0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--c-overlay)', padding: '8px 14px', borderRadius: '10px', border: '1px solid rgba(16, 185, 129, 0.1)' }}>
                     <span style={{ fontSize: '11px', color: 'var(--success-color)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>Break</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <input type="number" min="0" value={breakM === 0 && breakS === 0 ? '' : breakM} onChange={(e) => handleTimeChange('break', 'm', e.target.value)} disabled={isRunning && !isStudy} className="time-input" placeholder="00" />
@@ -106,13 +106,13 @@ export function FocusTimerSidebar({ timerProps }) {
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '4px' }}>
                 <button
                     onClick={toggleTimer}
-                    style={{ flex: 1, padding: '10px 0', borderRadius: '10px', background: isRunning ? 'rgba(255,255,255,0.05)' : 'var(--accent-gradient)', color: isRunning ? 'var(--text-main)' : 'white', border: isRunning ? '1px solid rgba(255,255,255,0.1)' : 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                    style={{ flex: 1, padding: '10px 0', borderRadius: '10px', background: isRunning ? 'var(--c-overlay)' : 'var(--accent-gradient)', color: isRunning ? 'var(--text-main)' : 'white', border: isRunning ? '1px solid rgba(239,68,68,0.1)' : 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                 >
                     {isRunning ? "⏸ Pause" : "▶ Start"}
                 </button>
                 <button
                     onClick={resetTimer}
-                    style={{ width: '42px', padding: '10px 0', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', color: 'var(--text-muted)', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    style={{ width: '42px', padding: '10px 0', borderRadius: '10px', background: 'var(--c-overlay)', color: 'var(--text-muted)', border: '1px solid rgba(239,68,68,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     title="Reset Timer"
                 >
                     🔄
@@ -135,8 +135,8 @@ export function FocusTimerBadge({ timerProps }) {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            background: isRunning ? (isStudy ? 'rgba(217, 70, 239, 0.15)' : 'rgba(16, 185, 129, 0.15)') : 'rgba(255,255,255,0.05)',
-            border: `1px solid ${isRunning ? (isStudy ? 'rgba(217, 70, 239, 0.3)' : 'rgba(16, 185, 129, 0.3)') : 'rgba(255,255,255,0.1)'}`,
+            background: isRunning ? (isStudy ? 'var(--c-overlay-strong)' : 'rgba(16, 185, 129, 0.15)') : 'var(--c-overlay)',
+            border: `1px solid ${isRunning ? (isStudy ? 'var(--c-border-strong)' : 'rgba(16, 185, 129, 0.3)') : 'var(--c-overlay)'}`,
             padding: '6px 16px',
             borderRadius: '24px',
             color: isRunning ? (isStudy ? 'var(--accent-color)' : 'var(--success-color)') : 'var(--text-main)',

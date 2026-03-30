@@ -42,7 +42,7 @@ export default function AmbientSounds() {
     };
 
     return (
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '6px 16px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', background: 'var(--c-overlay)', padding: '6px 16px', borderRadius: '20px', border: '1px solid rgba(239,68,68,0.1)' }}>
             <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>Ambient</span>
             <div style={{ display: 'flex', gap: '12px' }}>
                 {SOUNDS.map(sound => (
@@ -52,7 +52,7 @@ export default function AmbientSounds() {
                             style={{ 
                                 cursor: 'pointer', 
                                 fontSize: '18px', 
-                                filter: volumes[sound.id] > 0 ? 'drop-shadow(0 0 8px rgba(255,255,255,0.5))' : 'grayscale(100%) opacity(40%)',
+                                filter: volumes[sound.id] > 0 ? 'drop-shadow(0 0 8px rgba(239,68,68,0.1))' : 'grayscale(100%) opacity(40%)',
                                 transform: volumes[sound.id] > 0 ? 'scale(1.1)' : 'scale(1)',
                                 transition: 'all 0.2s ease'
                             }} 

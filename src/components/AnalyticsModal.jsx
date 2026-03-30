@@ -57,15 +57,15 @@ export default function AnalyticsModal({ onClose }) {
                 </div>
 
                 <h4 style={{ color: 'var(--text-main)', marginBottom: '16px', fontFamily: 'Outfit', fontSize: '20px' }}>Activity (Last 7 Days)</h4>
-                <div style={{ width: '100%', height: '300px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', padding: '20px 20px 0 0', border: '1px solid rgba(255,255,255,0.05)', boxShadow: 'inset 0 0 20px rgba(0,0,0,0.2)' }}>
+                <div style={{ width: '100%', height: '300px', background: 'var(--c-overlay)', borderRadius: '16px', padding: '20px 20px 0 0', border: '1px solid rgba(239,68,68,0.1)', boxShadow: 'inset 0 0 20px rgba(255,255,255,0.9)' }}>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                            <XAxis dataKey="name" stroke="rgba(255,255,255,0.4)" tick={{ fontSize: 12, fill: 'rgba(255,255,255,0.6)' }} axisLine={false} tickLine={false} dy={10} />
-                            <YAxis stroke="rgba(255,255,255,0.4)" tick={{ fontSize: 12, fill: 'rgba(255,255,255,0.6)' }} axisLine={false} tickLine={false} dx={-10} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(239,68,68,0.1)" vertical={false} />
+                            <XAxis dataKey="name" stroke="rgba(239,68,68,0.1)" tick={{ fontSize: 12, fill: 'var(--c-overlay)' }} axisLine={false} tickLine={false} dy={10} />
+                            <YAxis stroke="rgba(239,68,68,0.1)" tick={{ fontSize: 12, fill: 'var(--c-overlay)' }} axisLine={false} tickLine={false} dx={-10} />
                             <Tooltip
-                                cursor={{ fill: 'rgba(255,255,255,0.03)' }}
-                                contentStyle={{ background: 'rgba(15, 17, 26, 0.95)', border: '1px solid rgba(217, 70, 239, 0.4)', borderRadius: '12px', color: 'white', boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}
+                                cursor={{ fill: 'var(--c-overlay)' }}
+                                contentStyle={{ background: 'var(--c-modal-bg)', border: '1px solid rgba(239,68,68, 0.4)', borderRadius: '12px', color: 'white', boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}
                                 labelStyle={{ color: 'var(--accent-color)', fontWeight: 'bold', marginBottom: '4px' }}
                             />
                             <Bar dataKey="minutes" fill="url(#colorUv)" radius={[8, 8, 0, 0]} maxBarSize={60} />

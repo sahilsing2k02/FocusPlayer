@@ -71,13 +71,13 @@ export default function FocusTimer() {
     const isStudy = mode === 'study';
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(0,0,0,0.2)', padding: '20px 16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'var(--c-card-bg-strong)', padding: '20px 16px', borderRadius: '16px', border: '1px solid rgba(239,68,68,0.1)' }}>
 
             {/* Settings Rows */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '24px', width: '100%' }}>
 
                 {/* Study Row */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '8px 14px', borderRadius: '10px', border: '1px solid rgba(217, 70, 239, 0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--c-overlay)', padding: '8px 14px', borderRadius: '10px', border: '1px solid rgba(239,68,68, 0.1)' }}>
                     <span style={{ fontSize: '11px', color: 'var(--accent-color)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>Study</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <input type="number" min="0" value={studyM === 0 && studyS === 0 ? '' : studyM} onChange={(e) => handleTimeChange('study', 'm', e.target.value)} disabled={isRunning && isStudy} className="time-input" placeholder="00" />
@@ -87,7 +87,7 @@ export default function FocusTimer() {
                 </div>
 
                 {/* Break Row */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '8px 14px', borderRadius: '10px', border: '1px solid rgba(16, 185, 129, 0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--c-overlay)', padding: '8px 14px', borderRadius: '10px', border: '1px solid rgba(16, 185, 129, 0.1)' }}>
                     <span style={{ fontSize: '11px', color: 'var(--success-color)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>Break</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <input type="number" min="0" value={breakM === 0 && breakS === 0 ? '' : breakM} onChange={(e) => handleTimeChange('break', 'm', e.target.value)} disabled={isRunning && !isStudy} className="time-input" placeholder="00" />
@@ -101,8 +101,8 @@ export default function FocusTimer() {
             {/* Circular Timer UI */}
             <div className="timer-circle" style={{
                 width: '240px', height: '240px',
-                background: `conic-gradient(${isStudy ? 'var(--accent-color)' : 'var(--success-color)'} ${progress}%, rgba(255,255,255,0.05) ${progress}%)`,
-                boxShadow: isRunning ? `0 0 35px ${isStudy ? 'rgba(217, 70, 239, 0.25)' : 'rgba(16, 185, 129, 0.25)'}` : '0 0 15px rgba(0,0,0,0.3)',
+                background: `conic-gradient(${isStudy ? 'var(--accent-color)' : 'var(--success-color)'} ${progress}%, rgba(239,68,68,0.1) ${progress}%)`,
+                boxShadow: isRunning ? `0 0 35px ${isStudy ? 'rgba(239,68,68, 0.25)' : 'rgba(16, 185, 129, 0.25)'}` : '0 0 15px rgba(255,255,255,0.9)',
                 transition: 'all 0.5s ease'
             }}>
                 <div className="timer-inner" style={{ background: 'var(--bg-color)' }}>
@@ -126,11 +126,11 @@ export default function FocusTimer() {
                             style={{
                                 width: '60px', height: '60px', borderRadius: '50%',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                background: isRunning ? 'rgba(255, 255, 255, 0.1)' : 'var(--text-main)',
+                                background: isRunning ? 'var(--c-overlay)' : 'var(--text-main)',
                                 color: isRunning ? 'var(--text-main)' : 'var(--bg-color)',
-                                border: isRunning ? '1px solid rgba(255,255,255,0.2)' : 'none',
+                                border: isRunning ? '1px solid rgba(239,68,68,0.1)' : 'none',
                                 cursor: 'pointer',
-                                boxShadow: isRunning ? 'none' : '0 10px 30px rgba(255, 255, 255, 0.2)',
+                                boxShadow: isRunning ? 'none' : '0 10px 30px rgba(239,68,68,0.1)',
                                 transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                             }}
                             onMouseEnter={(e) => !isRunning && (e.currentTarget.style.transform = 'scale(1.08)')}
@@ -157,12 +157,12 @@ export default function FocusTimer() {
                             style={{
                                 width: '46px', height: '46px', borderRadius: '50%',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                background: 'rgba(255,255,255,0.03)', color: 'var(--text-muted)',
-                                border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer',
+                                background: 'var(--c-overlay)', color: 'var(--text-muted)',
+                                border: '1px solid rgba(239,68,68,0.1)', cursor: 'pointer',
                                 transition: 'all 0.2s'
                             }}
-                            onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)' }}
-                            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'rgba(255,255,255,0.03)' }}
+                            onMouseEnter={(e) => { e.currentTarget.style.color = 'white'; e.currentTarget.style.background = 'var(--c-overlay)' }}
+                            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'var(--c-overlay)' }}
                             title="Reset Timer"
                         >
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
