@@ -567,7 +567,7 @@ textarea.notes-input:focus {
   width: 88%;
   height: 88%;
   border-radius: 50%;
-  background: #fdfdfd;
+  background: var(--c-solid-bg);
   display: flex;
   flex-direction: column;
   justify-content: center;
