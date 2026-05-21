@@ -89,6 +89,8 @@ function App() {
     doc.save("FocusPlayer_Study_Notes.pdf");
   };
 
+  //It extracts the playlist ID from the URL you pasted using a utility function (getPlaylistId).
+  //Then it uses the noembed API to fetch the playlist title.
   const handleSubmit = async (url) => {
     const id = getPlaylistId(url);
     if (id) {
