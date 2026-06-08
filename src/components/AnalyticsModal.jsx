@@ -54,7 +54,12 @@ export default function AnalyticsModal({ onClose, stats = defaultStats }) {
                     </div>
                     <div className="stat-card">
                         <span className="stat-label">Current Streak</span>
-                        <h2 className="stat-value">{analytics.streak} Fire</h2>
+                        <h2 className="stat-value">
+                            {analytics.streak} <span className="streak-fire" aria-label="fire">🔥</span>
+                        </h2>
+                        <span className="stat-caption">
+                            {analytics.streak === 1 ? "day in a row" : "days in a row"}
+                        </span>
                     </div>
                 </div>
 

@@ -53,6 +53,7 @@ function App() {
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [playerRef, setPlayerRef] = useState(null);
   const [profileReady, setProfileReady] = useState(false);
+  const [openToolSection, setOpenToolSection] = useState("timer");
 
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [notes, setNotes] = useState(localStorage.getItem("notes") || "");
@@ -279,23 +280,69 @@ function App() {
         <div className={`sidebar-overlay ${showSidebar ? "open" : ""}`} onClick={() => setShowSidebar(false)}></div>
 
         <div className={`sidebar ${showSidebar ? "open" : ""}`}>
-          <div className="sidebar-title">
-            Tools
+          <div className="sidebar-header">
+            <div>
+              <div className="sidebar-eyebrow">Workspace</div>
+              <div className="sidebar-title">
+                Study Tools
+              </div>
+            </div>
+            <div className="sidebar-status">Focused Setup</div>
           </div>
 
-          <div className="sidebar-section">
-            <h3>Focus Timer</h3>
-            <FocusTimerSidebar timerProps={timerProps} />
+          <div className="sidebar-section sidebar-panel">
+            <button
+              type="button"
+              className={`sidebar-section-head sidebar-section-toggle ${openToolSection === "timer" ? "open" : ""}`}
+              onClick={() => setOpenToolSection((current) => current === "timer" ? "" : "timer")}
+            >
+              <div>
+                <div className="sidebar-section-index">1. Focus Timer</div>
+                <p>Keep your session paced and intentional.</p>
+              </div>
+              <span className="sidebar-section-badge">{openToolSection === "timer" ? "Open" : "Closed"}</span>
+            </button>
+            {openToolSection === "timer" && (
+              <div className="sidebar-section-body">
+                <FocusTimerSidebar timerProps={timerProps} />
+              </div>
+            )}
           </div>
 
-          <div className="sidebar-section">
-            <h3>Task List</h3>
-            <TodoList todos={todos} setTodos={setTodos} />
+          <div className="sidebar-section sidebar-panel">
+            <button
+              type="button"
+              className={`sidebar-section-head sidebar-section-toggle ${openToolSection === "tasks" ? "open" : ""}`}
+              onClick={() => setOpenToolSection((current) => current === "tasks" ? "" : "tasks")}
+            >
+              <div>
+                <div className="sidebar-section-index">2. Task List</div>
+                <p>Track the work you want to finish today.</p>
+              </div>
+              <span className="sidebar-section-badge">{openToolSection === "tasks" ? "Open" : "Closed"}</span>
+            </button>
+            {openToolSection === "tasks" && (
+              <div className="sidebar-section-body">
+                <TodoList todos={todos} setTodos={setTodos} />
+              </div>
+            )}
           </div>
 
-          <div className="sidebar-section">
-            <h3>Notes</h3>
-            <textarea
+          <div className="sidebar-section sidebar-panel">
+            <button
+              type="button"
+              className={`sidebar-section-head sidebar-section-toggle ${openToolSection === "notes" ? "open" : ""}`}
+              onClick={() => setOpenToolSection((current) => current === "notes" ? "" : "notes")}
+            >
+              <div>
+                <div className="sidebar-section-index">3. Notes</div>
+                <p>Capture quick ideas and timestamped takeaways.</p>
+              </div>
+              <span className="sidebar-section-badge">{openToolSection === "notes" ? "Open" : "Closed"}</span>
+            </button>
+            {openToolSection === "notes" && (
+              <div className="sidebar-section-body">
+                <textarea
               placeholder="Write your brilliant thoughts here..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -430,6 +477,8 @@ function App() {
               >
                 Clear All Notes
               </button>
+            )}
+              </div>
             )}
           </div>
         </div>

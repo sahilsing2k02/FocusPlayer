@@ -21,15 +21,15 @@ export default function TodoList({ todos, setTodos }) {
 
     return (
         <div className="todo-list-container" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            <form onSubmit={handleAdd} style={{ display: "flex", background: "var(--c-card-bg-strong)", borderRadius: "24px", padding: "6px", border: "1px solid rgba(239,68,68,0.1)", boxShadow: "inset 0 2px 5px rgba(255,255,255,0.9)" }}>
+            <form onSubmit={handleAdd} style={{ display: "flex", flexDirection: "column", gap: "10px", background: "var(--c-card-bg-strong)", borderRadius: "24px", padding: "10px", border: "1px solid rgba(239,68,68,0.1)", boxShadow: "inset 0 2px 5px rgba(255,255,255,0.9)" }}>
                 <input
                     type="text"
                     placeholder="Add a new task..."
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    style={{ flex: 1, background: "transparent", border: "none", color: "var(--text-main)", padding: "0 16px", outline: "none", fontSize: "14px" }}
+                    style={{ width: "100%", background: "transparent", border: "none", color: "var(--text-main)", padding: "8px 16px", outline: "none", fontSize: "14px" }}
                 />
-                <button type="submit" style={{ background: "var(--accent-gradient)", color: "white", border: "none", borderRadius: "20px", padding: "8px 16px", fontWeight: "bold", cursor: "pointer", transition: "all 0.2s", boxShadow: "0 4px 15px rgba(239,68,68, 0.25)" }} onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"} onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}>
+                <button type="submit" style={{ width: "100%", background: "var(--accent-gradient)", color: "white", border: "none", borderRadius: "20px", padding: "10px 16px", fontWeight: "bold", cursor: "pointer", transition: "all 0.2s", boxShadow: "0 4px 15px rgba(239,68,68, 0.25)" }} onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"} onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}>
                     Add
                 </button>
             </form>

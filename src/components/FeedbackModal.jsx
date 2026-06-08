@@ -11,6 +11,11 @@ export default function FeedbackModal({ onClose }) {
     const [message, setMessage] = useState("");
     const [rating, setRating] = useState(5);
 
+    const totalRatings = feedbacks.length;
+    const averageRating = totalRatings > 0
+        ? (feedbacks.reduce((sum, fb) => sum + (Number(fb.rating) || 0), 0) / totalRatings).toFixed(1)
+        : "0.0";
+
     useEffect(() => {
         const fetchFeedbacks = async () => {
             try {
@@ -120,6 +125,18 @@ export default function FeedbackModal({ onClose }) {
 
                     {/* Feedback List */}
                     <div className="feedback-list">
+                        <div className="feedback-summary-card">
+                            <div className="feedback-summary-score">{averageRating}</div>
+                            <div className="feedback-summary-meta">
+                                <h4>Average Rating</h4>
+                                <p>Based on {totalRatings} {totalRatings === 1 ? "review" : "reviews"}</p>
+                                <div className="feedback-summary-stars">
+                                    {"★".repeat(Math.round(Number(averageRating) || 0))}
+                                    {"☆".repeat(5 - Math.round(Number(averageRating) || 0))}
+                                </div>
+                            </div>
+                        </div>
+
                         {loading ? (
                             <div style={{ color: 'var(--text-muted)' }}>Connecting to Firebase Cloud network...</div>
                         ) : (
