@@ -108,7 +108,7 @@ export default function FeedbackModal({ onClose }) {
                             placeholder="What do you think about Focus Player? (Required)"
                             value={message}
                             onChange={e => setMessage(e.target.value)}
-                            className="feedback-input"
+                            className="feedback-input feedback-textarea"
                             style={{ height: '100px', resize: 'none' }}
                             required
                         />
@@ -135,7 +135,7 @@ export default function FeedbackModal({ onClose }) {
                                         <div style={{ margin: '6px 0', fontSize: '12px' }}>
                                             {"⭐".repeat(fb.rating)}
                                         </div>
-                                        <p style={{ fontSize: '14px', color: 'var(--c-overlay)', margin: 0, lineHeight: '1.6' }}>
+                                        <p style={{ fontSize: '14px', color: 'var(--text-main)', margin: 0, lineHeight: '1.6' }}>
                                             {fb.message}
                                         </p>
                                     </div>

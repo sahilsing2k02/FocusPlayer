@@ -1,56 +1,55 @@
 import { useEffect, useRef } from "react";
 
-export function useAnalytics(playerRef) {
+const defaultStats = {
+    watchTime: 0,
+    completedVideos: 0,
+    lastActiveDate: null,
+    streak: 0,
+    dailyWatchTime: {}
+};
+
+export function useAnalytics(playerRef, setAnalytics) {
     const prevState = useRef(-1);
 
     useEffect(() => {
-        if (!playerRef) return;
+        if (!playerRef || typeof setAnalytics !== "function") return;
 
         const interval = setInterval(() => {
-            if (typeof playerRef.getPlayerState !== 'function') return;
+            if (typeof playerRef.getPlayerState !== "function") return;
             const state = playerRef.getPlayerState();
+            const today = new Date().toISOString().split("T")[0];
 
-            // Retrieve existing or initialize defaults
-            let stats = JSON.parse(localStorage.getItem("focus_analytics")) || {
-                watchTime: 0,
-                completedVideos: 0,
-                lastActiveDate: null,
-                streak: 0,
-                dailyWatchTime: {}
-            };
+            setAnalytics((currentStats) => {
+                const stats = currentStats ? {
+                    ...defaultStats,
+                    ...currentStats,
+                    dailyWatchTime: currentStats.dailyWatchTime || {}
+                } : {
+                    ...defaultStats
+                };
 
-            const today = new Date().toISOString().split('T')[0];
+                if (state === 1) {
+                    stats.watchTime += 1;
 
-            // 1 = PLAYING
-            if (state === 1) {
-                stats.watchTime += 1;
+                    if (!stats.dailyWatchTime[today]) stats.dailyWatchTime[today] = 0;
+                    stats.dailyWatchTime[today] += 1;
 
-                if (!stats.dailyWatchTime[today]) stats.dailyWatchTime[today] = 0;
-                stats.dailyWatchTime[today] += 1;
-
-                // Streak logic
-                if (stats.lastActiveDate !== today) {
-                    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-                    if (stats.lastActiveDate === yesterday) {
-                        stats.streak += 1;
-                    } else {
-                        stats.streak = 1;
+                    if (stats.lastActiveDate !== today) {
+                        const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+                        stats.streak = stats.lastActiveDate === yesterday ? stats.streak + 1 : 1;
+                        stats.lastActiveDate = today;
                     }
-                    stats.lastActiveDate = today;
                 }
-            }
 
-            // 0 = ENDED (Detecting completion of a single video)
-            if (state === 0 && prevState.current === 1) {
-                stats.completedVideos += 1;
-            }
+                if (state === 0 && prevState.current === 1) {
+                    stats.completedVideos += 1;
+                }
 
-            // Sync and save state tracking to prevent multiple triggers
-            prevState.current = state;
-            localStorage.setItem("focus_analytics", JSON.stringify(stats));
-
+                prevState.current = state;
+                return stats;
+            });
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [playerRef]);
+    }, [playerRef, setAnalytics]);
 }

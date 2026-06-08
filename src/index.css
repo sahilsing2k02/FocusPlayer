@@ -757,10 +757,20 @@ textarea.notes-input:focus {
   transition: all 0.2s;
 }
 
+.feedback-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.9;
+}
+
 .feedback-input:focus {
   border-color: var(--c-border-xl);
   background: var(--c-overlay-light);
   box-shadow: 0 0 0 3px rgba(217, 70, 239, 0.1);
+}
+
+.feedback-textarea {
+  color: var(--text-main);
+  caret-color: var(--accent-color);
 }
 
 .feedback-list {
@@ -779,6 +789,7 @@ textarea.notes-input:focus {
   border-radius: 16px;
   padding: 20px;
   transition: transform 0.2s, background 0.2s;
+  color: var(--text-main);
 }
 
 .feedback-card:hover {
@@ -791,6 +802,10 @@ textarea.notes-input:focus {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.feedback-card p {
+  color: var(--text-main);
 }
 
 /* Analytics Sub-components */
