@@ -45,6 +45,7 @@ function App() {
   const timerProps = useFocusTimer();
   const clientIdRef = useRef(getClientId());
   const profileReadyRef = useRef(false);
+  const themeInitializedRef = useRef(false);
   const analyticsSaveTimeoutRef = useRef(null);
   const [currentUrl, setCurrentUrl] = useState("");
   const [playlistTitle, setPlaylistTitle] = useState("");
@@ -55,6 +56,8 @@ function App() {
   const [profileReady, setProfileReady] = useState(false);
   const [openToolSection, setOpenToolSection] = useState("timer");
 
+  // Read theme from localStorage — the HTML class is already set by the inline
+  // script in index.html, so there's no flash on initial load.
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [notes, setNotes] = useState(localStorage.getItem("notes") || "");
   const [noteTag, setNoteTag] = useState(localStorage.getItem("noteTag") || "None");
@@ -88,7 +91,13 @@ function App() {
         const data = snapshot.data();
 
         if (data) {
-          if (typeof data.theme === "string") setTheme(data.theme);
+          // Only restore theme from Firebase on the very first load.
+          // After that, the user's toggle should not be overridden by Firestore.
+          if (typeof data.theme === "string" && !themeInitializedRef.current) {
+            const savedTheme = data.theme;
+            setTheme(savedTheme);
+            document.documentElement.className = savedTheme === "dark" ? "dark" : "light";
+          }
           if (typeof data.currentUrl === "string") setCurrentUrl(data.currentUrl);
           if (typeof data.playlistTitle === "string") setPlaylistTitle(data.playlistTitle);
           if (typeof data.noteTag === "string") setNoteTag(data.noteTag);
@@ -104,11 +113,13 @@ function App() {
         }
 
         profileReadyRef.current = true;
+        themeInitializedRef.current = true;
         setProfileReady(true);
       },
       (error) => {
         console.error("Error syncing Firebase profile:", error);
         profileReadyRef.current = true;
+        themeInitializedRef.current = true;
         setProfileReady(true);
       }
     );
@@ -117,6 +128,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // Keep the HTML class, localStorage, and Firebase in sync whenever theme changes.
     document.documentElement.className = theme === "dark" ? "dark" : "light";
     localStorage.setItem("theme", theme);
     syncProfile({ theme });
@@ -249,7 +261,13 @@ function App() {
           <FocusTimerBadge timerProps={timerProps} />
           <AmbientSounds />
           <button
-            onClick={() => setTheme((t) => t === "light" ? "dark" : "light")}
+            onClick={() => {
+              const next = theme === "light" ? "dark" : "light";
+              // Apply the class synchronously so the visual change is instant,
+              // before React re-renders, eliminating the flicker.
+              document.documentElement.className = next === "dark" ? "dark" : "light";
+              setTheme(next);
+            }}
             className="btn-primary"
             style={{ padding: "10px 20px", fontSize: "14px", borderRadius: "16px", background: "var(--c-overlay-light)", border: "1px solid var(--c-border)", color: "var(--text-main)", boxShadow: "none" }}
             onMouseEnter={(e) => e.target.style.background = "var(--c-overlay)"}
