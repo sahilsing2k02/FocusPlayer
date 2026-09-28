@@ -45,8 +45,8 @@ export default function AnalyticsModal({ onClose, stats = defaultStats }) {
 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginBottom: "30px" }}>
                     <div className="stat-card">
-                        <span className="stat-label">Total Focus Time</span>
-                        <h2 className="stat-value">{formatTime(analytics.watchTime)}</h2>
+                        <span className="stat-label">Today's Focus Time</span>
+                        <h2 className="stat-value">{formatTime(analytics.dailyWatchTime[new Date().toISOString().split("T")[0]] || 0)}</h2>
                     </div>
                     <div className="stat-card">
                         <span className="stat-label">Videos Completed</span>
@@ -68,8 +68,8 @@ export default function AnalyticsModal({ onClose, stats = defaultStats }) {
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData}>
                             <CartesianGrid strokeDasharray="3 3" stroke="rgba(239,68,68,0.1)" vertical={false} />
-                            <XAxis dataKey="name" stroke="rgba(239,68,68,0.1)" tick={{ fontSize: 12, fill: "var(--c-overlay)" }} axisLine={false} tickLine={false} dy={10} />
-                            <YAxis stroke="rgba(239,68,68,0.1)" tick={{ fontSize: 12, fill: "var(--c-overlay)" }} axisLine={false} tickLine={false} dx={-10} />
+                            <XAxis dataKey="name" stroke="rgba(239,68,68,0.1)" tick={{ fontSize: 12, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} dy={10} />
+                            <YAxis stroke="rgba(239,68,68,0.1)" tick={{ fontSize: 12, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} dx={-10} />
                             <Tooltip
                                 cursor={{ fill: "var(--c-overlay)" }}
                                 contentStyle={{ background: "var(--c-modal-bg)", border: "1px solid rgba(239,68,68, 0.4)", borderRadius: "12px", color: "white", boxShadow: "0 10px 25px rgba(0,0,0,0.5)" }}
