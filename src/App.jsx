@@ -153,11 +153,11 @@ function App() {
   }, [theme]);
 
   useEffect(() => {
-    localStorage.setItem("focus_currentUrl", currentUrl);
+    if (currentUrl) localStorage.setItem("focus_currentUrl", currentUrl);
   }, [currentUrl]);
 
   useEffect(() => {
-    localStorage.setItem("focus_playlistTitle", playlistTitle);
+    if (playlistTitle) localStorage.setItem("focus_playlistTitle", playlistTitle);
   }, [playlistTitle]);
 
   useEffect(() => {
