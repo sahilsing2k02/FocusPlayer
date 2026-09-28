@@ -47,8 +47,8 @@ function App() {
   const profileReadyRef = useRef(false);
   const themeInitializedRef = useRef(false);
   const analyticsSaveTimeoutRef = useRef(null);
-  const [currentUrl, setCurrentUrl] = useState("");
-  const [playlistTitle, setPlaylistTitle] = useState("");
+  const [currentUrl, setCurrentUrl] = useState(localStorage.getItem("focus_currentUrl") || "");
+  const [playlistTitle, setPlaylistTitle] = useState(localStorage.getItem("focus_playlistTitle") || "");
   const [showSidebar, setShowSidebar] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [showAnalytics, setShowAnalytics] = useState(false);
@@ -151,6 +151,14 @@ function App() {
     localStorage.setItem("theme", theme);
     syncProfile({ theme });
   }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("focus_currentUrl", currentUrl);
+  }, [currentUrl]);
+
+  useEffect(() => {
+    localStorage.setItem("focus_playlistTitle", playlistTitle);
+  }, [playlistTitle]);
 
   useEffect(() => {
     localStorage.setItem("notes", notes);
@@ -554,6 +562,8 @@ function App() {
                 setCurrentUrl("");
                 setPlaylistTitle("");
                 setPlayerRef(null);
+                localStorage.removeItem("focus_currentUrl");
+                localStorage.removeItem("focus_playlistTitle");
                 syncProfile({ currentUrl: "", playlistTitle: "" });
               }}
               style={{ background: "var(--c-overlay)", border: "none", color: "var(--danger-color)", padding: "6px 14px", borderRadius: "20px", cursor: "pointer", fontSize: "13px", fontWeight: "bold", transition: "all 0.2s", marginLeft: "12px" }}
