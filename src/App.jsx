@@ -98,8 +98,8 @@ function App() {
             setTheme(savedTheme);
             document.documentElement.className = savedTheme === "dark" ? "dark" : "light";
           }
-          if (typeof data.currentUrl === "string") setCurrentUrl(data.currentUrl);
-          if (typeof data.playlistTitle === "string") setPlaylistTitle(data.playlistTitle);
+          if (typeof data.currentUrl === "string" && data.currentUrl) setCurrentUrl(data.currentUrl);
+          if (typeof data.playlistTitle === "string" && data.playlistTitle) setPlaylistTitle(data.playlistTitle);
           if (typeof data.noteTag === "string") setNoteTag(data.noteTag);
           if (Array.isArray(data.timestampNotes)) setTimestampNotes(data.timestampNotes);
           if (Array.isArray(data.todos)) setTodos(data.todos);
