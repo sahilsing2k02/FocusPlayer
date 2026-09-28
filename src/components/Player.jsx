@@ -1,12 +1,57 @@
 import { useEffect, useRef } from "react";
 
+const POSITION_KEY = "focus_player_position";
+
+function savePosition(player) {
+  try {
+    if (!player || typeof player.getPlaylistIndex !== "function") return;
+    const index = player.getPlaylistIndex();
+    const time = player.getCurrentTime() || 0;
+    if (index >= 0) {
+      localStorage.setItem(POSITION_KEY, JSON.stringify({ index, time }));
+    }
+  } catch { /* best-effort */ }
+}
+
+function getSavedPosition() {
+  try {
+    const raw = localStorage.getItem(POSITION_KEY);
+    if (!raw) return null;
+    const pos = JSON.parse(raw);
+    if (typeof pos.index === "number" && typeof pos.time === "number") return pos;
+  } catch { /* ignore */ }
+  return null;
+}
+
 export default function Player({ playlistId, setPlayerRef }) {
   const playerContainerRef = useRef(null);
+  const positionSaveInterval = useRef(null);
 
   useEffect(() => {
     if (!playlistId) return;
 
     let player;
+
+    function restorePosition(ytPlayer) {
+      const saved = getSavedPosition();
+      if (!saved || saved.index < 0) return;
+
+      const playlist = ytPlayer.getPlaylist();
+      if (!playlist || saved.index >= playlist.length) return;
+
+      const currentIndex = ytPlayer.getPlaylistIndex();
+      if (currentIndex !== saved.index) {
+        ytPlayer.playVideoAt(saved.index);
+        // Wait for the new video to load before seeking
+        setTimeout(() => {
+          if (saved.time > 0) ytPlayer.seekTo(saved.time, true);
+          ytPlayer.pauseVideo();
+        }, 1500);
+      } else if (saved.time > 0) {
+        ytPlayer.seekTo(saved.time, true);
+        ytPlayer.pauseVideo();
+      }
+    }
 
     function createPlayer() {
       player = new window.YT.Player(playerContainerRef.current, {
@@ -24,9 +69,16 @@ export default function Player({ playlistId, setPlayerRef }) {
             if (setPlayerRef) {
               setPlayerRef(event.target);
             }
+            // Restore position after the playlist has loaded
+            setTimeout(() => restorePosition(event.target), 2000);
           },
         },
       });
+
+      // Save position every 3 seconds while playing
+      positionSaveInterval.current = setInterval(() => {
+        if (player) savePosition(player);
+      }, 3000);
     }
 
     if (!window.YT) {
@@ -39,8 +91,21 @@ export default function Player({ playlistId, setPlayerRef }) {
       createPlayer();
     }
 
+    // Flush position on page unload
+    const handleUnload = () => {
+      if (player) savePosition(player);
+    };
+    window.addEventListener("beforeunload", handleUnload);
+
     return () => {
-      if (player) player.destroy();
+      window.removeEventListener("beforeunload", handleUnload);
+      if (positionSaveInterval.current) {
+        clearInterval(positionSaveInterval.current);
+      }
+      if (player) {
+        savePosition(player);
+        player.destroy();
+      }
     };
   }, [playlistId, setPlayerRef]);
 
