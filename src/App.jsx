@@ -104,10 +104,28 @@ function App() {
           if (Array.isArray(data.timestampNotes)) setTimestampNotes(data.timestampNotes);
           if (Array.isArray(data.todos)) setTodos(data.todos);
           if (data.analytics) {
-            setAnalytics({
-              ...defaultAnalytics,
-              ...data.analytics,
-              dailyWatchTime: data.analytics.dailyWatchTime || {}
+            // Merge Firebase analytics with current state (from localStorage)
+            // to avoid losing progress due to the 5s Firebase sync debounce.
+            setAnalytics((local) => {
+              const remote = {
+                ...defaultAnalytics,
+                ...data.analytics,
+                dailyWatchTime: data.analytics.dailyWatchTime || {}
+              };
+              const localDaily = (local && local.dailyWatchTime) || {};
+              const remoteDaily = remote.dailyWatchTime;
+              const mergedDaily = { ...remoteDaily };
+              for (const day of Object.keys(localDaily)) {
+                mergedDaily[day] = Math.max(mergedDaily[day] || 0, localDaily[day] || 0);
+              }
+              return {
+                ...remote,
+                watchTime: Math.max(remote.watchTime || 0, (local && local.watchTime) || 0),
+                completedVideos: Math.max(remote.completedVideos || 0, (local && local.completedVideos) || 0),
+                streak: Math.max(remote.streak || 0, (local && local.streak) || 0),
+                lastActiveDate: remote.lastActiveDate || (local && local.lastActiveDate),
+                dailyWatchTime: mergedDaily
+              };
             });
           }
         }
@@ -174,10 +192,31 @@ function App() {
     };
   }, [analytics, profileReady]);
 
-  useEffect(() => () => {
-    if (analyticsSaveTimeoutRef.current) {
-      clearTimeout(analyticsSaveTimeoutRef.current);
-    }
+  useEffect(() => {
+    // Flush any pending debounced analytics save to Firebase on page
+    // refresh / close so data is never lost to the 5s debounce.
+    const handleBeforeUnload = () => {
+      if (analyticsSaveTimeoutRef.current) {
+        clearTimeout(analyticsSaveTimeoutRef.current);
+        analyticsSaveTimeoutRef.current = null;
+      }
+      // Use the latest analytics from localStorage (always up-to-date).
+      try {
+        const latest = JSON.parse(localStorage.getItem("focus_analytics"));
+        if (latest && profileReadyRef.current) {
+          const profileRef = doc(db, "focusProfiles", clientIdRef.current);
+          setDoc(profileRef, { analytics: latest, updatedAt: serverTimestamp() }, { merge: true });
+        }
+      } catch { /* best-effort */ }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (analyticsSaveTimeoutRef.current) {
+        clearTimeout(analyticsSaveTimeoutRef.current);
+      }
+    };
   }, []);
 
   useAnalytics(playerRef, setAnalytics);
