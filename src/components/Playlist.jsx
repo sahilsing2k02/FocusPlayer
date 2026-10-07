@@ -48,43 +48,34 @@ export default function Playlist({ playerRef }) {
                     <div
                         id={`playlist-video-${index}`}
                         key={index}
-                        className="playlist-card"
-                        style={{
-                            borderColor: isActive ? 'var(--c-border-xl)' : '',
-                            backgroundColor: isActive ? 'var(--c-overlay)' : ''
-                        }}
+                        className={`playlist-card ${isActive ? 'active' : ''}`}
                         onClick={() => {
                             if (playerRef && typeof playerRef.playVideoAt === 'function') {
                                 playerRef.playVideoAt(index);
                             }
                         }}
                     >
-                        <div style={{ position: 'relative' }}>
+                        <div className="playlist-thumb-wrapper">
                             <img
                                 src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
                                 alt="thumbnail"
                                 className="playlist-thumb"
                             />
-                            <span style={{
-                                position: 'absolute',
-                                bottom: '2px',
-                                right: '4px',
-                                backgroundColor: 'rgba(0,0,0,0.8)',
-                                color: 'white',
-                                fontSize: '10px',
-                                padding: '1px 4px',
-                                borderRadius: '4px',
-                                fontWeight: 'bold'
-                            }}>
+                            <span className="playlist-index-badge">
                                 {index + 1}
                             </span>
                         </div>
                         <div className="playlist-info">
-                            <span className="playlist-title" style={{ color: isActive ? 'var(--accent-color)' : '' }}>
+                            <span className="playlist-title">
                                 Video #{index + 1}
                             </span>
                             <span className="playlist-sub">
-                                {isActive ? '▶ Playing' : 'Click to play'}
+                                {isActive ? (
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-color)', fontWeight: '600' }}>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                        Playing
+                                    </span>
+                                ) : 'Click to play'}
                             </span>
                         </div>
                     </div>

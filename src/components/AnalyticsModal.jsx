@@ -63,19 +63,19 @@ export default function AnalyticsModal({ onClose, stats = defaultStats }) {
                     </div>
                 </div>
 
-                <h4 style={{ color: "var(--text-main)", marginBottom: "16px", fontFamily: "Outfit", fontSize: "20px" }}>Activity (Last 7 Days)</h4>
-                <div style={{ width: "100%", height: "300px", background: "var(--c-overlay)", borderRadius: "16px", padding: "20px 20px 0 0", border: "1px solid rgba(239,68,68,0.1)", boxShadow: "inset 0 0 20px rgba(255,255,255,0.9)" }}>
+                <h4 style={{ color: "var(--text-main)", marginBottom: "16px", fontFamily: "Outfit", fontSize: "20px", fontWeight: "600", letterSpacing: "-0.5px" }}>Activity (Last 7 Days)</h4>
+                <div style={{ width: "100%", height: "300px", background: "var(--c-overlay-strong)", backdropFilter: "blur(12px)", borderRadius: "20px", padding: "20px 20px 0 0", border: "1px solid var(--panel-border)", boxShadow: "0 10px 30px rgba(0,0,0,0.05)" }}>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="rgba(239,68,68,0.1)" vertical={false} />
-                            <XAxis dataKey="name" stroke="rgba(239,68,68,0.1)" tick={{ fontSize: 12, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} dy={10} />
-                            <YAxis stroke="rgba(239,68,68,0.1)" tick={{ fontSize: 12, fill: "var(--text-muted)" }} axisLine={false} tickLine={false} dx={-10} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="var(--c-border)" vertical={false} />
+                            <XAxis dataKey="name" stroke="var(--text-muted)" tick={{ fontSize: 12, fill: "var(--text-muted)", fontWeight: "500" }} axisLine={false} tickLine={false} dy={10} />
+                            <YAxis stroke="var(--text-muted)" tick={{ fontSize: 12, fill: "var(--text-muted)", fontWeight: "500" }} axisLine={false} tickLine={false} dx={-10} />
                             <Tooltip
-                                cursor={{ fill: "var(--c-overlay)" }}
-                                contentStyle={{ background: "var(--c-modal-bg)", border: "1px solid rgba(239,68,68, 0.4)", borderRadius: "12px", color: "white", boxShadow: "0 10px 25px rgba(0,0,0,0.5)" }}
-                                labelStyle={{ color: "var(--accent-color)", fontWeight: "bold", marginBottom: "4px" }}
+                                cursor={{ fill: "var(--c-overlay-light)" }}
+                                contentStyle={{ background: "var(--c-modal-bg)", backdropFilter: "blur(12px)", border: "1px solid var(--panel-border)", borderRadius: "16px", color: "var(--text-main)", boxShadow: "0 15px 35px rgba(0,0,0,0.2)" }}
+                                labelStyle={{ color: "var(--text-muted)", fontWeight: "600", marginBottom: "6px", textTransform: "uppercase", fontSize: "11px", letterSpacing: "1px" }}
                             />
-                            <Bar dataKey="minutes" fill="url(#colorUv)" radius={[8, 8, 0, 0]} maxBarSize={60} />
+                            <Bar dataKey="minutes" fill="url(#colorUv)" radius={[10, 10, 0, 0]} maxBarSize={60} />
                             <defs>
                                 <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="5%" stopColor="#d946ef" stopOpacity={0.9} />

@@ -310,17 +310,20 @@ function App() {
           <button
             onClick={() => {
               const next = theme === "light" ? "dark" : "light";
-              // Apply the class synchronously so the visual change is instant,
-              // before React re-renders, eliminating the flicker.
               document.documentElement.className = next === "dark" ? "dark" : "light";
               setTheme(next);
             }}
             className="btn-primary"
-            style={{ padding: "10px 20px", fontSize: "14px", borderRadius: "16px", background: "var(--c-overlay-light)", border: "1px solid var(--c-border)", color: "var(--text-main)", boxShadow: "none" }}
-            onMouseEnter={(e) => e.target.style.background = "var(--c-overlay)"}
-            onMouseLeave={(e) => e.target.style.background = "var(--c-overlay-light)"}
+            style={{ padding: "10px", borderRadius: "16px", background: "var(--c-overlay)", border: "1px solid var(--panel-border)", color: "var(--text-main)", boxShadow: "none", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "var(--c-hover-solid)"; e.currentTarget.style.transform = "rotate(15deg) scale(1.1)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "var(--c-overlay)"; e.currentTarget.style.transform = "rotate(0) scale(1)"; }}
+            title={`Switch to ${theme === "light" ? "Dark" : "Light"} Mode`}
           >
-            {theme === "light" ? "🌙" : "☀️"}
+            {theme === "light" ? (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#3b82f6" }}><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#fbbf24" }}><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            )}
           </button>
           <button
             onClick={() => setShowAnalytics(true)}
@@ -407,54 +410,66 @@ function App() {
             </button>
             {openToolSection === "notes" && (
               <div className="sidebar-section-body">
-                <textarea
-              placeholder="Write your brilliant thoughts here..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="notes-input"
-            />
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "16px" }}>
-              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                {["None", "Important", "Code", "Review"].map((tag) => (
-                  <button
-                    key={tag}
-                    onClick={() => setNoteTag(tag)}
-                    className={`tag-pill ${noteTag === tag ? "active" : ""}`}
-                  >
-                    {tag === "None" ? "No Tag" : tag}
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => {
-                  if (!notes.trim()) return;
+                <div style={{ background: "var(--c-overlay-strong)", padding: "12px", borderRadius: "16px", border: "1px solid var(--panel-border)", boxShadow: "inset 0 2px 4px rgba(0,0,0,0.1)", display: "flex", flexDirection: "column", gap: "12px", marginBottom: "16px" }}>
+                  <textarea
+                    placeholder="Capture a thought..."
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    style={{ width: "100%", background: "transparent", border: "none", color: "var(--text-main)", fontSize: "14px", outline: "none", resize: "none", minHeight: "60px", fontFamily: "Outfit" }}
+                  />
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <div style={{ display: "flex", gap: "6px", overflowX: "auto", paddingBottom: "4px" }}>
+                      {["None", "Important", "Code", "Review"].map((tag) => (
+                        <button
+                          key={tag}
+                          onClick={() => setNoteTag(tag)}
+                          style={{
+                            fontSize: "10px", padding: "4px 8px", borderRadius: "8px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.5px", transition: "all 0.2s", cursor: "pointer", flexShrink: 0,
+                            background: noteTag === tag ? "var(--accent-color)" : "var(--c-solid-bg)",
+                            color: noteTag === tag ? "white" : "var(--text-muted)",
+                            border: "1px solid",
+                            borderColor: noteTag === tag ? "transparent" : "var(--panel-border)",
+                            boxShadow: noteTag === tag ? "0 2px 8px var(--accent-glow)" : "inset 0 1px 2px rgba(0,0,0,0.2)"
+                          }}
+                        >
+                          {tag === "None" ? "No Tag" : tag}
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => {
+                        if (!notes.trim()) return;
 
-                  let timeInSeconds = 0;
-                  let displayTime = "0:00";
-                  let videoIndex = -1;
+                        let timeInSeconds = 0;
+                        let displayTime = "0:00";
+                        let videoIndex = -1;
 
-                  if (playerRef && typeof playerRef.getCurrentTime === "function") {
-                    timeInSeconds = playerRef.getCurrentTime() || 0;
-                    if (typeof playerRef.getPlaylistIndex === "function") {
-                      videoIndex = playerRef.getPlaylistIndex();
-                    }
-                    const m = Math.floor(timeInSeconds / 60);
-                    const s = Math.floor(timeInSeconds % 60);
-                    displayTime = `${m}:${s < 10 ? `0${s}` : s}`;
-                  } else {
-                    displayTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-                  }
+                        if (playerRef && typeof playerRef.getCurrentTime === "function") {
+                          timeInSeconds = playerRef.getCurrentTime() || 0;
+                          if (typeof playerRef.getPlaylistIndex === "function") {
+                            videoIndex = playerRef.getPlaylistIndex();
+                          }
+                          const m = Math.floor(timeInSeconds / 60);
+                          const s = Math.floor(timeInSeconds % 60);
+                          displayTime = `${m}:${s < 10 ? `0${s}` : s}`;
+                        } else {
+                          displayTime = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+                        }
 
-                  const newNote = { text: notes, time: displayTime, seconds: timeInSeconds, videoIndex, tag: noteTag };
-                  setTimestampNotes((currentNotes) => [...currentNotes, newNote]);
-                  setNotes("");
-                }}
-                className="btn-primary"
-                style={{ width: "100%", padding: "12px" }}
-              >
-                Add Timestamp Note
-              </button>
-            </div>
+                        const newNote = { text: notes, time: displayTime, seconds: timeInSeconds, videoIndex, tag: noteTag };
+                        setTimestampNotes((currentNotes) => [...currentNotes, newNote]);
+                        setNotes("");
+                      }}
+                      style={{ width: "100%", background: "var(--accent-gradient)", color: "white", border: "none", borderRadius: "10px", padding: "10px 12px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.2s", boxShadow: "0 4px 10px var(--accent-glow)", fontWeight: "bold", gap: "6px" }}
+                      onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
+                      onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+                      title="Add Timestamp Note"
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      Add Note
+                    </button>
+                  </div>
+                </div>
 
             <div className="notes-list">
               {timestampNotes.map((note, index) => (
@@ -578,6 +593,23 @@ function App() {
 
       <main className="content-area">
         <div className="player-wrapper">
+          {!currentUrl && (
+            <div className="empty-state">
+              <div className="empty-state-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"></path>
+                  <path d="M10 8L16 12L10 16V8Z"></path>
+                </svg>
+              </div>
+              <h2 className="empty-state-title">Ready to Focus?</h2>
+              <p className="empty-state-desc">Paste a YouTube playlist URL above or pick a preset.</p>
+              <div className="preset-chips">
+                <button className="preset-chip" onClick={() => handleSubmit("https://www.youtube.com/playlist?list=PLOFmEhyfUckx7x3iF51x_p0gSjH7n3pYn")}>Lofi Chill</button>
+                <button className="preset-chip" onClick={() => handleSubmit("https://www.youtube.com/playlist?list=PLP32s4Zma16-TzJ3Uov7l76gHk01e2Uvj")}>Deep Focus</button>
+                <button className="preset-chip" onClick={() => handleSubmit("https://www.youtube.com/playlist?list=PLMIbmfQ_cbVBw23-B2lD0e11p3z2QJ4Vq")}>Rainy Jazz</button>
+              </div>
+            </div>
+          )}
           <Player playlistId={currentUrl} setPlayerRef={setPlayerRef} />
         </div>
 

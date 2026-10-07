@@ -74,15 +74,22 @@ export default function Timer({ playerRef }) {
 
   return (
     <div className="timer-container">
-      <div className="timer-circle" style={{
-        background: `conic-gradient(var(--accent-color) ${progress}%, rgba(239,68,68,0.1) ${progress}%)`
-      }}>
+      <div className="timer-circle" style={{ background: 'transparent' }}>
+        <svg width="220" height="220" viewBox="0 0 220 220" style={{ position: 'absolute', top: 0, left: 0, transform: 'rotate(-90deg)', zIndex: 1 }}>
+          <circle cx="110" cy="110" r="102" fill="none" stroke="var(--c-overlay-strong)" strokeWidth="12" />
+          <circle cx="110" cy="110" r="102" fill="none" stroke="var(--accent-color)" strokeWidth="12"
+            strokeDasharray={2 * Math.PI * 102}
+            strokeDashoffset={2 * Math.PI * 102 * (1 - (progress || 0) / 100)}
+            strokeLinecap="round"
+            style={{ transition: 'stroke-dashoffset 0.5s ease' }}
+          />
+        </svg>
         <div className="timer-inner">
-          <h1 style={{ fontSize: '32px' }}>
-            {playlistData.total > 0 ? `${playlistData.index + 1} / ${playlistData.total}` : formatTime(currentTime)}
+          <h1 style={{ fontSize: '38px', margin: '0', letterSpacing: '-1px', color: 'var(--text-main)', fontFamily: 'Outfit' }}>
+            {playlistData.total > 0 ? `${Math.round(progress || 0)}%` : formatTime(currentTime)}
           </h1>
-          <span style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '-8px', marginBottom: '8px', letterSpacing: '1px' }}>
-            {playlistData.total > 0 ? "PLAYLIST PROGRESS" : `/ ${formatTime(duration)}`}
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px', marginBottom: '16px', letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 'bold' }}>
+            {playlistData.total > 0 ? `${playlistData.index + 1} of ${playlistData.total} videos` : `/ ${formatTime(duration)}`}
           </span>
 
           <div className="timer-controls">
@@ -90,19 +97,23 @@ export default function Timer({ playerRef }) {
               onClick={handleTogglePlay}
               className={`timer-btn ${isPlaying ? "danger" : "active"}`}
               disabled={!playerRef}
-              style={{ opacity: playerRef ? 1 : 0.5, fontSize: '18px', padding: '6px 14px' }}
+              style={{ opacity: playerRef ? 1 : 0.5, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '42px', height: '42px', padding: 0, borderRadius: '50%' }}
               title={isPlaying ? "Pause" : "Play"}
             >
-              {isPlaying ? "⏸️" : "▶️"}
+              {isPlaying ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'translateX(2px)' }}><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              )}
             </button>
             <button
               onClick={handleReset}
               className="timer-btn"
               disabled={!playerRef}
-              style={{ opacity: playerRef ? 1 : 0.5, fontSize: '18px', padding: '6px 14px' }}
+              style={{ opacity: playerRef ? 1 : 0.5, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '42px', height: '42px', padding: 0, borderRadius: '50%' }}
               title="Restart Playlist"
             >
-              🔄
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10"></path><path d="M3.51 15A9 9 0 0 0 18.36 18.36L23 14"></path></svg>
             </button>
           </div>
         </div>

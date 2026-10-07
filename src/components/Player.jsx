@@ -24,13 +24,20 @@ function getSavedPosition() {
 }
 
 export default function Player({ playlistId, setPlayerRef }) {
-  const playerContainerRef = useRef(null);
+  const containerRef = useRef(null);
   const positionSaveInterval = useRef(null);
 
   useEffect(() => {
     if (!playlistId) return;
 
     let player;
+    
+    // Create an un-managed inner div for YouTube to replace
+    const ytTarget = document.createElement('div');
+    if (containerRef.current) {
+      containerRef.current.innerHTML = '';
+      containerRef.current.appendChild(ytTarget);
+    }
 
     function restorePosition(ytPlayer) {
       const saved = getSavedPosition();
@@ -54,7 +61,7 @@ export default function Player({ playlistId, setPlayerRef }) {
     }
 
     function createPlayer() {
-      player = new window.YT.Player(playerContainerRef.current, {
+      player = new window.YT.Player(ytTarget, {
         height: "100%",
         width: "100%",
         playerVars: {
@@ -102,12 +109,15 @@ export default function Player({ playlistId, setPlayerRef }) {
       if (positionSaveInterval.current) {
         clearInterval(positionSaveInterval.current);
       }
-      if (player) {
+      if (player && typeof player.destroy === 'function') {
         savePosition(player);
         player.destroy();
+      }
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
       }
     };
   }, [playlistId, setPlayerRef]);
 
-  return <div ref={playerContainerRef} style={{ width: "100%", height: "100%" }}></div>;
+  return <div ref={containerRef} style={{ width: "100%", height: "100%" }}></div>;
 }
