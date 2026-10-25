@@ -38,30 +38,6 @@ YouTube hosts world-class educational lectures, courses, and tutorials, but its 
 | 🌓 **Glassmorphic UI & Themes** | Sleek frosted glass aesthetics with dynamic Light and Dark mode toggles and zero-flash initial loading. |
 | 💬 **Community Feedback** | Share ratings and discuss study sessions anonymously in real-time via Google Firebase Firestore. |
 
----
-
-## 📸 Screenshots
-
-<div align="center">
-
-### Distraction-Free Study Dashboard
-<img width="950" alt="FocusPlayer Dashboard" src="https://github.com/user-attachments/assets/1bb7d890-e744-4f5b-80b4-f1396f0298f0" />
-
-### Timestamped Notes & Playlist Queue
-<img width="950" alt="Study Notes and Playlist Queue" src="https://github.com/user-attachments/assets/30d2f673-a9dc-49b8-83ca-bceb4d2f719d" />
-
-### Weekly Analytics & Study Streaks
-<img width="950" alt="Analytics Dashboard" src="https://github.com/user-attachments/assets/15e71d18-b51c-4a5e-8f5a-6751c5ddd6bb" />
-
-<p align="center">
-  <img width="48%" alt="Ambient Sounds & Tools" src="https://github.com/user-attachments/assets/d74181da-451e-4343-b8a9-6f46f27b32f2" />
-  <img width="48%" alt="Community Feedback Board" src="https://github.com/user-attachments/assets/e336497d-d23c-4f97-8110-26e43bce092a" />
-</p>
-
-</div>
-
----
-
 ## 🛠️ Tech Stack
 
 - **Frontend**: [React 19](https://react.dev/)
